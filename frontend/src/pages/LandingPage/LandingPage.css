@@ -205,3 +205,44 @@
   stroke-linecap: round;
   stroke-linejoin: round;
 }
+/* ========================================
+   Rymdanimering för planeten
+   ======================================== */
+
+/* 1. Den svävande rörelsen */
+@keyframes floatPlanet {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-15px); /* Planeten rör sig 15px uppåt */
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+/* 2. Det pulserande skenet (använder gruppens gula färg) */
+@keyframes glowPlanet {
+  0% {
+    filter: drop-shadow(0px 10px 20px rgba(0, 0, 0, 0.4));
+  }
+  50% {
+    filter: drop-shadow(0px 15px 30px rgba(242, 179, 61, 0.4)); /* Gult sken */
+  }
+  100% {
+    filter: drop-shadow(0px 10px 20px rgba(0, 0, 0, 0.4));
+  }
+}
+
+/* Vi kopplar animationerna till din planet-klass */
+.hero__planet {
+  /* Vi behåller den gamla koden men lägger till animationerna */
+  width: clamp(200px, 60vw, 280px);
+  height: auto;
+
+  /* Här körs båda animationerna samtidigt, oändligt många gånger */
+  animation:
+    floatPlanet 6s ease-in-out infinite,
+    glowPlanet 4s ease-in-out infinite;
+}
