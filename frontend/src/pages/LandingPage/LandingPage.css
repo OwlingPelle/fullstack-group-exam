@@ -243,7 +243,7 @@
 
   /* Här körs båda animationerna samtidigt, oändligt många gånger */
   animation:
-    floatPlanet 10s ease-in-out infinite,
+    floatPlanet 6.2s ease-in-out infinite,
     glowPlanet 6s ease-in-out infinite;
 }
 
