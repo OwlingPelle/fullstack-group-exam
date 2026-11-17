@@ -243,6 +243,49 @@
 
   /* Här körs båda animationerna samtidigt, oändligt många gånger */
   animation:
-    floatPlanet 6s ease-in-out infinite,
-    glowPlanet 4s ease-in-out infinite;
+    floatPlanet 10s ease-in-out infinite,
+    glowPlanet 6s ease-in-out infinite;
+}
+
+/* ========================================
+   Rymdanimering: Blinkande stjärnor
+   ======================================== */
+
+@keyframes twinkleGold {
+  0%,
+  100% {
+    opacity: 0.3;
+    transform: scale(0.8);
+    box-shadow: 0 0 5px var(--color-light-orange);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.3);
+    box-shadow: 0 0 15px var(--color-light-orange);
+  }
+}
+
+@keyframes twinkleCream {
+  0%,
+  100% {
+    opacity: 0.2;
+    transform: scale(1);
+    box-shadow: 0 0 3px var(--color-text);
+  }
+  50% {
+    opacity: 0.9;
+    transform: scale(1.5);
+    box-shadow: 0 0 12px var(--color-text);
+  }
+}
+
+/* Vi lägger till animationerna på stjärnorna */
+.hero__star--gold {
+  animation: twinkleGold 3s ease-in-out infinite;
+}
+
+.hero__star--cream {
+  /* Denna får en annan hastighet och en liten fördröjning för att inte blinka i takt */
+  animation: twinkleCream 4.5s ease-in-out infinite;
+  animation-delay: 1.5s;
 }
