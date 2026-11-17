@@ -1,0 +1,207 @@
+/* ========================================
+   Stars Cantina – Landing Page
+   ======================================== */
+
+/* Vi sparar bara den här variabeln lokalt eftersom den bara används här */
+.page {
+  --bottom-nav-height: clamp(66px, 10svh, 78px);
+
+  display: grid;
+  grid-template-rows:
+    minmax(100px, 17svh)
+    minmax(46px, 9svh)
+    minmax(320px, 1fr);
+  min-height: 100vh;
+  min-height: 100svh;
+  padding-bottom: calc(var(--bottom-nav-height) + env(safe-area-inset-bottom));
+  background: var(--color-bg);
+}
+
+/* Header */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75rem 1rem 0.5rem;
+  text-align: center;
+}
+
+.header__title {
+  display: flex;
+  flex-direction: column;
+  gap: 0.02em;
+  margin: 0;
+  color: var(--color-text);
+  font-family: var(--font-heading);
+  font-size: clamp(1.35rem, 6.2vw, 1.8rem);
+  font-weight: 400;
+  letter-spacing: 0.025em;
+  line-height: 1.02;
+}
+
+.header__title-line {
+  display: block;
+  white-space: nowrap;
+}
+
+/* Färgade avdelare mellan header och hero */
+.color-divider {
+  width: 100%;
+  min-height: 0;
+  background: linear-gradient(
+    to bottom,
+    var(--color-light-orange) 0 20.8%,
+    var(--color-bg) 20.8% 29.2%,
+    var(--color-orange) 29.2% 52.1%,
+    var(--color-bg) 52.1% 62.5%,
+    var(--color-red) 62.5% 75%,
+    var(--color-bg) 75% 85.4%,
+    var(--color-green) 85.4% 100%
+  );
+}
+
+/* Hero */
+.hero {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  padding: 1rem;
+}
+
+.hero__star {
+  position: absolute;
+  border-radius: 50%;
+  background-color: var(--color-text);
+  opacity: 0.8;
+}
+
+.hero__star--gold {
+  width: 6px;
+  height: 6px;
+  background-color: var(--color-light-orange);
+  top: 20%;
+  left: 15%;
+  box-shadow: 0 0 10px var(--color-light-orange);
+}
+
+.hero__star--cream {
+  width: 4px;
+  height: 4px;
+  top: 60%;
+  right: 20%;
+  box-shadow: 0 0 8px var(--color-text);
+}
+
+.hero__content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  z-index: 10;
+}
+
+.hero__planet {
+  width: clamp(200px, 60vw, 280px);
+  height: auto;
+  filter: drop-shadow(0px 10px 20px rgba(0, 0, 0, 0.4));
+}
+
+/* Färger för planeten */
+.planet-base {
+  fill: var(--color-green);
+}
+
+.planet-stripe-gold {
+  fill: var(--color-light-orange);
+}
+
+.planet-stripe-red {
+  fill: var(--color-red);
+}
+
+.planet-ring {
+  fill: none;
+  stroke: var(--color-text);
+  stroke-width: 4;
+}
+
+.hero__wordmark {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.hero__title {
+  font-family: var(--font-heading);
+  font-size: clamp(3rem, 12vw, 4.5rem);
+  font-weight: 400;
+  letter-spacing: 0.05em;
+  color: var(--color-light-orange);
+  line-height: 0.9;
+  text-shadow: 0 4px 15px rgba(242, 179, 61, 0.3);
+}
+
+.hero__subtitle {
+  font-family: var(--font-label);
+  font-size: clamp(1.2rem, 5vw, 1.8rem);
+  font-weight: 700;
+  letter-spacing: 0.4em;
+  color: var(--color-text);
+  margin-top: 0.2rem;
+  margin-left: 0.4em;
+}
+
+/* ========================================
+   Bottom Navigation (Endast för LandingPage)
+   ======================================== */
+/* Vi lägger till ".page" framför för att skydda menysidans CSS! */
+.page .bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: calc(var(--bottom-nav-height) + env(safe-area-inset-bottom));
+  padding-bottom: env(safe-area-inset-bottom);
+  background: var(--color-surface);
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  border-top: 1px solid var(--color-border);
+  z-index: 100;
+}
+
+.page .nav-button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.3rem;
+  color: var(--color-text-muted);
+  background: transparent;
+  border: none;
+  flex: 1;
+  height: 100%;
+  cursor: pointer;
+  font-family: var(--font-label);
+  font-size: 11px;
+  text-transform: uppercase;
+  transition: color 0.2s ease;
+}
+
+.page .nav-button[aria-current="page"] {
+  color: var(--color-light-orange);
+}
+
+.page .nav-button svg {
+  width: 24px;
+  height: 24px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
