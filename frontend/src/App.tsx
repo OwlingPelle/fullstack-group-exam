@@ -1,13 +1,16 @@
 import { useState } from "react";
+import AdminPage from "./pages/AdminPage/AdminPage";
 import LandingPage from "./pages/LandingPage/LandingPage";
 import MenuPage from "./pages/MenuPage/MenuPage";
 
 function App() {
-  const [currentPage, setCurrentPage] = useState<"landing" | "menu">("landing");
+  const [currentPage, setCurrentPage] = useState<"landing" | "menu" | "admin">("landing");
 
   return (
     <>
-      {currentPage === "landing" ? (
+      {currentPage === "admin" ? (
+        <AdminPage onNavigate={setCurrentPage} />
+      ) : currentPage === "landing" ? (
         <LandingPage onNavigate={setCurrentPage} />
       ) : (
         <MenuPage onNavigate={setCurrentPage} />
