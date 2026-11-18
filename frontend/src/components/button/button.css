@@ -1,0 +1,53 @@
+/* Same font, round shape and hover as the "+ Add" button on the menu page,
+   only bigger and full width */
+.button {
+    width: 100%;
+    min-height: 58px;
+    padding: 0 24px;
+    border-radius: 999px; /* fully round ends */
+    font-family: var(--font-label);
+    font-size: 15px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: transform 160ms ease, background-color 160ms ease, border-color 160ms ease;
+}
+
+/* Lift the button a little on hover, but not when it is disabled */
+.button:hover:not(:disabled) {
+    transform: translateY(-1px);
+}
+
+.button:focus-visible {
+    outline: 2px solid var(--color-light-orange);
+    outline-offset: 3px;
+}
+
+/* Greyed out, e.g. while the payment is loading */
+.button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+/* Orange and filled */
+.button--primary {
+    color: var(--color-bg);
+    background-color: var(--color-orange);
+    border: none;
+}
+
+.button--primary:hover:not(:disabled) {
+    background-color: var(--color-light-orange);
+}
+
+/* Transparent with a border, like the category buttons */
+.button--secondary {
+    color: var(--color-text);
+    background-color: transparent;
+    border: 2px solid var(--color-border);
+}
+
+.button--secondary:hover:not(:disabled) {
+    border-color: var(--color-orange);
+}
