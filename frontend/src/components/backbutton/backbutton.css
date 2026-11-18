@@ -1,9 +1,9 @@
-/* Same border, colors and focus ring as the category buttons on the menu page */
+
 .back-button {
     display: flex;
     align-items: center;
     justify-content: center;
-    flex-shrink: 0; /* never gets smaller next to the page title */
+    flex-shrink: 0; 
     width: 48px;
     height: 48px;
     color: var(--color-text);

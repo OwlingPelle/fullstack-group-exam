@@ -13,7 +13,7 @@ import CheckoutForm from "../../components/checkoutform/CheckoutForm";
 import "./PaymentPage.css";
 
 
-// STRIPE:
+// ------------------------- STRIPE:---------------------------------
 
 // Our publishable TEST key from Stripe (starts with "pk_test_").
 // It comes from the file frontend/.env.local.
