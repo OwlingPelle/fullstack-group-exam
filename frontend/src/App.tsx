@@ -1,26 +1,22 @@
-
-import { useEffect, useState } from 'react'
-import MenuPage from './pages/MenuPage/MenuPage'
-import CartPage from './pages/CartPage/CartPage'
+import { useState } from "react";
+import AdminPage from "./pages/AdminPage/AdminPage";
+import LandingPage from "./pages/LandingPage/LandingPage";
+import MenuPage from "./pages/MenuPage/MenuPage";
 
 function App() {
-  const [showCart, setShowCart] = useState(
-    window.location.hash === '#cart'
-  )
+  const [currentPage, setCurrentPage] = useState<"landing" | "menu" | "cart" | "admin">("landing");
 
-  useEffect(() => {
-    const handleHashChange = () => {
-      setShowCart(window.location.hash === '#cart')
-    }
-
-    window.addEventListener('hashchange', handleHashChange)
-
-    return () => {
-      window.removeEventListener('hashchange', handleHashChange)
-    }
-  }, [])
-
-  return showCart ? <CartPage /> : <MenuPage />
+  return (
+    <>
+      {currentPage === "admin" ? (
+        <AdminPage onNavigate={setCurrentPage} />
+      ) : currentPage === "landing" ? (
+        <LandingPage onNavigate={setCurrentPage} />
+      ) : (
+        <MenuPage onNavigate={setCurrentPage} />
+      )}
+    </>
+  );
 }
 
-export default App
+export default App;
