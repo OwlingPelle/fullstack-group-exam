@@ -2,6 +2,7 @@
 import { useCartStore } from '../../stores/cartStore'
 import { menuItems } from "../../data/demoMenu";
 import './CartPage.css'
+import Icon from "../../components/Icon";
 
 interface CartPageProps {
   onNavigate?: (page: "landing" | "menu" | "cart" | "payment" | "login" | "admin" | "staff" | "customer") => void
@@ -123,7 +124,7 @@ function CartPage({ onNavigate }: CartPageProps) {
                   onClick={() => removeItem(product.id)}
                   aria-label={`Ta bort ${product.name}`}
                 >
-                  🗑
+                  <Icon name="remove" />
                 </button>
               </article>
             ))}
