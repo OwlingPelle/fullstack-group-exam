@@ -1,14 +1,14 @@
 import Icon from "./Icon";
 
 interface BottomNavProps {
-  currentPage?: "landing" | "menu";
-  onNavigate?: (page: "landing" | "menu") => void;
+  currentPage?: "landing" | "menu" | "login";
+  onNavigate?: (page: "landing" | "menu" | "login") => void;
 }
 
 function BottomNav({ currentPage = "menu", onNavigate }: BottomNavProps) {
   return (
     <nav className="bottom-nav" aria-label="Main navigation">
-      {/* Ny Home-knapp */}
+      {/* Home-knappen */}
       <button
         className="nav-button"
         type="button"
@@ -30,12 +30,19 @@ function BottomNav({ currentPage = "menu", onNavigate }: BottomNavProps) {
         <span>Menu</span>
       </button>
 
+      {/* Varukorg */}
       <button className="nav-button" type="button">
         <Icon name="cart" />
         <span>Cart</span>
       </button>
 
-      <button className="nav-button" type="button">
+      {/* Konto-knappen */}
+      <button
+        className="nav-button"
+        type="button"
+        onClick={() => onNavigate?.("login")}
+        aria-current={currentPage === "login" ? "page" : undefined}
+      >
         <Icon name="user" />
         <span>Account</span>
       </button>
