@@ -3,7 +3,8 @@ import { loadStripe } from "@stripe/stripe-js";
 import type { Appearance } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
 import { useCartStore } from "../../stores/cartStore";
-import { menuItems } from "../../utils/menuData";
+import { menuItems } from "../../data/demoMenu";
+import Icon from "../../components/Icon";
 import { createPaymentIntent } from "../../services/payment.api";
 import type { OrderLineType } from "../../types/payment.types";
 import BackButton from "../../components/backbutton/BackButton";
@@ -93,11 +94,15 @@ const PaymentPage = ({ onBack, onPaid } : PropType) => {
     }, [items]);
 
     if (orderLines.length === 0) {
-        return <p className="payment__message">Your cart is empty.</p>;
+        return (
+            <main className="payment page-frame">
+                <p className="payment__message">Your cart is empty.</p>
+            </main>
+        );
     }
 
     return (
-        <main className="payment">
+        <main className="payment page-frame">
             <header className="payment__header">
                 <BackButton onClick={ onBack } label="Back to cart" />
                 <div>
@@ -144,18 +149,11 @@ const PaymentPage = ({ onBack, onPaid } : PropType) => {
 
                 <p className="payment__secure">
                     {/* A padlock. aria-hidden: screen readers skip it */}
-                    <svg
+                    <Icon
+                        name="lock"
                         className="payment__secure-icon"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                        strokeLinecap="round"
                         aria-hidden="true"
-                    >
-                        <rect x="5" y="11" width="14" height="10" rx="2" />
-                        <path d="M8 11V8a4 4 0 0 1 8 0v3" />
-                    </svg>
+                    />
                     Payments are handled securely by Stripe. We never store your card details.
                 </p>
             </section>

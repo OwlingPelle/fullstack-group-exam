@@ -1,0 +1,231 @@
+.staff-content {
+  min-height: 0;
+  flex: 1;
+  width: min(100%, 1440px);
+  align-self: center;
+  overflow: auto;
+}
+
+.staff-intro {
+  margin: -8px 0 20px;
+  color: var(--color-text-muted);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.staff-stat-grid {
+  margin-bottom: 24px;
+}
+
+.staff-stat-card strong {
+  color: var(--color-light-orange);
+}
+
+.staff-order-list {
+  display: grid;
+  gap: 14px;
+}
+
+.staff-order-card {
+  padding: 20px;
+  border: 1px solid var(--color-border);
+  border-radius: 17px;
+  background: var(--color-surface);
+}
+
+.staff-order-card__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.staff-order-card__header h3 {
+  font: 400 21px var(--font-heading);
+}
+
+.staff-status {
+  padding: 6px 10px;
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+  color: var(--color-text-muted);
+  font: 500 10px var(--font-label);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.staff-status--received {
+  color: var(--color-light-orange);
+  border-color: rgba(242, 179, 61, 0.4);
+}
+
+.staff-status--kitchen {
+  color: #a9cce0;
+  border-color: rgba(169, 204, 224, 0.4);
+}
+
+.staff-status--ready {
+  color: #8ad2b1;
+  border-color: rgba(138, 210, 177, 0.4);
+}
+
+.staff-status--delivered {
+  color: var(--color-text-muted);
+}
+
+.staff-order-customer {
+  padding: 16px 0;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.staff-order-customer div,
+.staff-order-items li {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.staff-order-customer div {
+  flex-direction: column;
+  gap: 5px;
+}
+
+.staff-order-customer span,
+.staff-order-action p,
+.staff-verification__prompt span {
+  color: var(--color-text-muted);
+  font-size: 12px;
+}
+
+.staff-order-customer strong {
+  overflow-wrap: anywhere;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.staff-order-items {
+  padding: 13px 0;
+  display: grid;
+  gap: 10px;
+  border-top: 1px solid var(--color-border);
+  list-style: none;
+}
+
+.staff-order-items li {
+  color: var(--color-text-muted);
+  font-size: 13px;
+}
+
+.staff-order-items strong,
+.staff-order-total strong {
+  color: var(--color-text);
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.staff-order-total {
+  display: flex;
+  justify-content: space-between;
+  color: var(--color-text-muted);
+  font: 500 12px var(--font-label);
+}
+
+.staff-order-action {
+  margin-top: 18px;
+  padding-top: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  border-top: 1px solid var(--color-border);
+}
+
+.staff-verification {
+  margin-top: 18px;
+  padding: 16px;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: end;
+  gap: 12px;
+  border: 1px solid rgba(138, 210, 177, 0.3);
+  border-radius: 13px;
+  background: rgba(46, 140, 138, 0.09);
+}
+
+.staff-verification__prompt {
+  display: grid;
+  gap: 5px;
+}
+
+.staff-verification__prompt strong {
+  font-size: 13px;
+}
+
+.staff-verification__reference {
+  grid-column: 1 / -1;
+  color: var(--color-text-muted);
+  font-size: 12px;
+}
+
+.staff-verification__reference strong {
+  color: var(--color-light-orange);
+  font: 700 13px var(--font-label);
+}
+
+.staff-code-field {
+  display: grid;
+  gap: 6px;
+  color: var(--color-text-muted);
+  font: 500 10px var(--font-label);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.staff-code-field input {
+  min-height: 38px;
+  padding: 8px 10px;
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
+  border-radius: 9px;
+  background: var(--color-bg);
+  font: 400 14px var(--font-body);
+}
+
+.staff-page button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.staff-complete-message {
+  margin-top: 17px;
+  padding-top: 14px;
+  color: #8ad2b1;
+  border-top: 1px solid var(--color-border);
+  font-size: 13px;
+}
+
+@media (max-width: 700px) {
+  .staff-order-card {
+    padding: 15px;
+  }
+
+  .staff-order-customer {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .staff-verification {
+    grid-template-columns: 1fr;
+  }
+
+  .staff-verification__reference {
+    grid-column: auto;
+  }
+
+  .staff-verification .admin-button {
+    width: 100%;
+  }
+}

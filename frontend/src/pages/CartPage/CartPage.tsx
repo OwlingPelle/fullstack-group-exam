@@ -1,6 +1,6 @@
 
 import { useCartStore } from '../../stores/cartStore'
-import { menuItems } from '../../utils/menuData'
+import { menuItems } from "../../data/demoMenu";
 import './CartPage.css'
 
 function CartPage() {
