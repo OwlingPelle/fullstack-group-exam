@@ -11,7 +11,10 @@ function MenuPage() {
   const [selectedCategory, setSelectedCategory] = useState('All')
   const addItem = useCartStore((state) => state.addItem)
   const cartCount = useCartStore((state) => state.itemCount())
-
+// TILLFÄLLIGT TILLÄGG
+  const openCart = () => {
+    window.location.hash = 'cart'
+}
   const visibleItems = useMemo(
     () =>
       selectedCategory === 'All'
@@ -32,6 +35,10 @@ function MenuPage() {
         </div>
       </section>
       <BottomNav />
+      {/* TILLFÄLLIGT TILLÄGG */}
+<button type="button" onClick={openCart}>
+  Till varukorgen ({cartCount})
+</button>
     </main>
   )
 }

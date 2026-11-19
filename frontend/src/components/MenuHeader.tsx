@@ -1,3 +1,4 @@
+
 import Icon from './Icon'
 
 interface MenuHeaderProps {
@@ -12,7 +13,11 @@ function MenuHeader({ cartCount }: MenuHeaderProps) {
           <p className="opening-hours">Open 17–01</p>
           <h1 className="brand-name">STARS CANTINA</h1>
         </div>
-        <button className="cart-button" type="button" aria-label={`Cart, ${cartCount} items`}>
+        <button
+          className="cart-button"
+          type="button"
+          aria-label={`Cart, ${cartCount} items`}
+        >
           <Icon name="cart" />
           <span className="cart-count" aria-live="polite">{cartCount}</span>
         </button>
