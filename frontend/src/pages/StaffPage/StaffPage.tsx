@@ -15,7 +15,7 @@ type Order = {
   items: { name: string; quantity: number; price: number }[];
 };
 type StaffPageProps = {
-  onNavigate: (page: "landing" | "menu" | "admin" | "staff") => void;
+  onNavigate: (page: "landing" | "menu" | "admin" | "staff" | "customer") => void;
 };
 
 const demoOrders: Order[] = [

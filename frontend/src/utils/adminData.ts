@@ -22,6 +22,14 @@ export interface AccountRecord {
   status: "Active" | "Inactive";
 }
 
+export const demoCustomerProfile: AccountRecord = {
+  id: "customer-001",
+  name: "Jordan Lee",
+  email: "jordan@example.com",
+  role: "Customer",
+  status: "Active",
+};
+
 export const demoAdminProfile: AdminProfile = {
   id: "admin-001",
   name: "Alex Morgan",
@@ -71,13 +79,7 @@ export const demoAccounts: AccountRecord[] = [
     role: "Personnel" as const,
     status: person.status,
   })),
-  {
-    id: "customer-001",
-    name: "Jordan Lee",
-    email: "jordan@example.com",
-    role: "Customer",
-    status: "Active",
-  },
+  demoCustomerProfile,
   {
     id: "customer-002",
     name: "Casey Patel",

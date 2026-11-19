@@ -262,15 +262,16 @@
 }
 
 .nav-button {
-  min-width: 72px;
-  padding: 4px 8px;
+  min-width: 0;
+  flex: 1;
+  padding: 4px 2px;
   display: grid;
   justify-items: center;
   gap: 4px;
   color: var(--color-text-muted);
   border: 0;
   background: transparent;
-  font: 500 11px var(--font-label);
+  font: 500 clamp(8px, 2.8vw, 11px) var(--font-label);
   text-transform: uppercase;
   cursor: pointer;
 }
