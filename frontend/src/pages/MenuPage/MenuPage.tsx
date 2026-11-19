@@ -9,7 +9,7 @@ import { menuItems } from "../../utils/menuData";
 
 // 1. Vi lägger till detta interface för att ta emot navigationen
 interface MenuPageProps {
-  onNavigate?: (page: "landing" | "menu" | "admin") => void;
+  onNavigate?: (page: "landing" | "menu" | "admin" | "staff") => void;
 }
 
 // 2. Vi lägger till { onNavigate } i funktionen

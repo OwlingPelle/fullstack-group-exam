@@ -20,7 +20,7 @@ type DialogState =
   | { kind: "password"; account: AccountRecord }
   | null;
 type AdminPageProps = {
-  onNavigate: (page: "landing" | "menu" | "admin") => void;
+  onNavigate: (page: "landing" | "menu" | "admin" | "staff") => void;
 };
 
 const sections: { id: AdminSection; label: string }[] = [
