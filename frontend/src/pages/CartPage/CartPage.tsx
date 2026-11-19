@@ -3,7 +3,11 @@ import { useCartStore } from '../../stores/cartStore'
 import { menuItems } from "../../data/demoMenu";
 import './CartPage.css'
 
-function CartPage() {
+interface CartPageProps {
+  onNavigate?: (page: "landing" | "menu" | "cart" | "payment" | "login" | "admin" | "staff" | "customer") => void
+}
+
+function CartPage({ onNavigate }: CartPageProps) {
   const items = useCartStore((state) => state.items)
   const addItem = useCartStore((state) => state.addItem)
 
@@ -58,7 +62,7 @@ function CartPage() {
       <header className="cart-header">
         <button
           className="cart-back-button"
-          onClick={() => window.history.back()}
+          onClick={() => onNavigate?.("menu")}
         >
           ← Tillbaka
         </button>
@@ -135,6 +139,7 @@ function CartPage() {
 
         <button
           className="cart-checkout-button"
+          onClick={() => onNavigate?.("payment")}
           disabled={cartProducts.length === 0}
         >
           Gå till betalning →

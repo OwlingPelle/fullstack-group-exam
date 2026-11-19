@@ -27,7 +27,7 @@ function MenuPage({ onNavigate }: MenuPageProps) {
 
   return (
     <main className="menu-page page-frame">
-      <MenuHeader cartCount={cartCount} />
+      <MenuHeader cartCount={cartCount} onNavigate={onNavigate} />
 
       <section className="menu-content" aria-label="Food and drinks menu">
         <CategoryFilter
