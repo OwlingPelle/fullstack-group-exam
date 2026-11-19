@@ -1,45 +1,12 @@
 import BottomNav from "../../components/BottomNav";
-import { demoCustomerProfile } from "../../utils/adminData";
+import { demoCustomerOrders, type CustomerOrderStatus } from "../../data/demoOrders";
+import { demoCustomerProfile } from "../../data/demoAccounts";
 import "../AdminPage/AdminPage.css";
 import "./CustomerPage.css";
 
-type CustomerOrderStatus = "Received" | "On the way" | "Delivered";
-type CustomerOrder = {
-  id: string;
-  date: string;
-  status: CustomerOrderStatus;
-  items: { name: string; quantity: number; price: number }[];
-};
 type CustomerPageProps = {
-  onNavigate: (page: "landing" | "menu" | "admin" | "staff" | "customer") => void;
+  onNavigate: (page: "landing" | "menu" | "login" | "admin" | "staff" | "customer") => void;
 };
-
-const demoCustomerOrders: CustomerOrder[] = [
-  {
-    id: "SC-1045",
-    date: "Today · 6:20 PM",
-    status: "On the way",
-    items: [
-      { name: "Nebulosa-ramen", quantity: 1, price: 155 },
-      { name: "Stardust Soda", quantity: 2, price: 35 },
-    ],
-  },
-  {
-    id: "SC-1038",
-    date: "Today · 12:45 PM",
-    status: "Received",
-    items: [
-      { name: "Nerf Kebab", quantity: 1, price: 129 },
-      { name: "Meteor Fries", quantity: 1, price: 59 },
-    ],
-  },
-  {
-    id: "SC-1012",
-    date: "Yesterday · 7:10 PM",
-    status: "Delivered",
-    items: [{ name: "Comet Wings", quantity: 2, price: 99 }],
-  },
-];
 
 const statusClass: Record<CustomerOrderStatus, string> = {
   Received: "customer-status--received",
@@ -52,7 +19,7 @@ function CustomerPage({ onNavigate }: CustomerPageProps) {
   const activeOrders = demoCustomerOrders.filter((order) => order.status !== "Delivered").length;
 
   return (
-    <main className="admin-page customer-page">
+    <main className="admin-page customer-page page-frame">
       <header className="admin-header">
         <div>
           <p className="admin-eyebrow">STARS CANTINA / CUSTOMER</p>
@@ -60,7 +27,14 @@ function CustomerPage({ onNavigate }: CustomerPageProps) {
         </div>
         <div className="admin-header__user">
           <span className="admin-avatar" aria-hidden="true">{demoCustomerProfile.name.charAt(0)}</span>
-          <span>{demoCustomerProfile.name}</span>
+          <span className="admin-header__name">{demoCustomerProfile.name}</span>
+          <button
+            className="admin-button admin-button--quiet admin-header__logout"
+            onClick={() => onNavigate("landing")}
+            type="button"
+          >
+            Log out
+          </button>
         </div>
       </header>
       <div className="admin-colour-stripes" aria-hidden="true" />

@@ -8,8 +8,8 @@ import {
   type AccountRecord,
   type AdminProfile,
   type Personnel,
-} from "../../utils/adminData";
-import { menuItems as demoMenuItems, menuCategories, type MenuCategory, type MenuItem } from "../../utils/menuData";
+} from "../../data/demoAccounts";
+import { menuItems as demoMenuItems, menuCategories, type MenuCategory, type MenuItem } from "../../data/demoMenu";
 import "./AdminPage.css";
 
 type AdminSection = "overview" | "menu" | "personnel" | "accounts" | "profile";
@@ -20,7 +20,7 @@ type DialogState =
   | { kind: "password"; account: AccountRecord }
   | null;
 type AdminPageProps = {
-  onNavigate: (page: "landing" | "menu" | "admin" | "staff" | "customer") => void;
+  onNavigate: (page: "landing" | "menu" | "login" | "admin" | "staff" | "customer") => void;
 };
 
 const sections: { id: AdminSection; label: string }[] = [
@@ -157,7 +157,7 @@ function AdminPage({ onNavigate }: AdminPageProps) {
   const heading = sections.find((item) => item.id === section)?.label ?? "Overview";
 
   return (
-    <main className="admin-page">
+    <main className="admin-page page-frame">
       <header className="admin-header">
         <div>
           <p className="admin-eyebrow">STARS CANTINA / ADMIN</p>
@@ -165,7 +165,14 @@ function AdminPage({ onNavigate }: AdminPageProps) {
         </div>
         <div className="admin-header__user">
           <span className="admin-avatar" aria-hidden="true">{profile.name.charAt(0)}</span>
-          <span>{profile.name}</span>
+          <span className="admin-header__name">{profile.name}</span>
+          <button
+            className="admin-button admin-button--quiet admin-header__logout"
+            onClick={() => onNavigate("landing")}
+            type="button"
+          >
+            Log out
+          </button>
         </div>
       </header>
       <div className="admin-colour-stripes" aria-hidden="true" />

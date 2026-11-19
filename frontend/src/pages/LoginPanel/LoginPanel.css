@@ -1,0 +1,172 @@
+/* ========================================
+   Login Panel - Stars Cantina
+   ======================================== */
+
+.login-panel-page {
+  /* Uppdaterat klassnamn */
+  display: flex;
+  flex-direction: column;
+  color: var(--color-text);
+}
+
+.login-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1.5rem;
+  width: 100%;
+  max-width: 450px;
+  margin: 0 auto;
+}
+
+.login-planet {
+  width: 120px;
+  height: auto;
+  margin-bottom: 1.5rem;
+  filter: drop-shadow(0px 10px 15px rgba(0, 0, 0, 0.4));
+  animation: floatPlanet 6s ease-in-out infinite;
+}
+
+.login-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.login-subtitle {
+  font-family: var(--font-label);
+  font-size: 0.75rem;
+  letter-spacing: 0.25em;
+  color: var(--color-text-muted);
+  margin-bottom: 0.5rem;
+}
+
+.login-title {
+  font-family: var(--font-heading);
+  font-size: clamp(2rem, 8vw, 2.5rem);
+  color: var(--color-text);
+  font-weight: 400;
+  letter-spacing: 0.05em;
+  margin: 0;
+}
+
+.login-form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.input-group label {
+  font-family: var(--font-label);
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+  letter-spacing: 0.1em;
+}
+
+.input-group input {
+  width: 100%;
+  padding: 1rem;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  color: var(--color-text);
+  font-family: var(--font-body);
+  font-size: 1rem;
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+
+.input-group input::placeholder {
+  color: var(--color-text-muted);
+  opacity: 0.6;
+}
+
+.input-group input:focus {
+  border-color: var(--color-orange);
+}
+
+.forgot-password {
+  align-self: flex-end;
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  color: var(--color-light-orange);
+  text-decoration: none;
+  margin-top: -0.5rem;
+}
+
+.forgot-password:hover {
+  text-decoration: underline;
+}
+
+.login-error {
+  color: #ff9a88;
+  font-size: 0.85rem;
+  line-height: 1.4;
+}
+
+.login-demo-hint {
+  color: var(--color-text-muted);
+  font-size: 0.75rem;
+  line-height: 1.5;
+}
+
+.login-button {
+  margin-top: 1rem;
+  width: 100%;
+  padding: 1.1rem;
+  background: var(--color-orange);
+  color: var(--color-bg);
+  font-family: var(--font-label);
+  font-size: 0.9rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  border: none;
+  border-radius: 999px;
+  cursor: pointer;
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease;
+}
+
+.login-button:hover {
+  background: var(--color-light-orange);
+  transform: translateY(-2px);
+}
+
+.login-footer {
+  margin-top: 3rem;
+  text-align: center;
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  color: var(--color-text-muted);
+}
+
+.login-footer a {
+  color: var(--color-light-orange);
+  text-decoration: none;
+  font-weight: 700;
+}
+
+.login-footer a:hover {
+  text-decoration: underline;
+}
+
+@keyframes floatPlanet {
+  0% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+  100% {
+    transform: translateY(0px);
+  }
+}

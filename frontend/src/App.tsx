@@ -2,11 +2,14 @@ import { useState } from "react";
 import AdminPage from "./pages/AdminPage/AdminPage";
 import CustomerPage from "./pages/CustomerPage/CustomerPage";
 import LandingPage from "./pages/LandingPage/LandingPage";
+import LoginPanel from "./pages/LoginPanel/LoginPanel";
 import MenuPage from "./pages/MenuPage/MenuPage";
 import StaffPage from "./pages/StaffPage/StaffPage";
 
+type AppPage = "landing" | "menu" | "login" | "admin" | "staff" | "customer";
+
 function App() {
-  const [currentPage, setCurrentPage] = useState<"landing" | "menu" | "admin" | "staff" | "customer">("landing");
+  const [currentPage, setCurrentPage] = useState<AppPage>("landing");
 
   return (
     <>
@@ -16,6 +19,8 @@ function App() {
         <StaffPage onNavigate={setCurrentPage} />
       ) : currentPage === "customer" ? (
         <CustomerPage onNavigate={setCurrentPage} />
+      ) : currentPage === "login" ? (
+        <LoginPanel onNavigate={setCurrentPage} />
       ) : currentPage === "landing" ? (
         <LandingPage onNavigate={setCurrentPage} />
       ) : (

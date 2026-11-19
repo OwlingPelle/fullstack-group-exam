@@ -1,60 +1,15 @@
 import { useMemo, useState } from "react";
 import BottomNav from "../../components/BottomNav";
-import { demoPersonnel } from "../../utils/adminData";
+import { demoPersonnel } from "../../data/demoAccounts";
+import { demoStaffOrders, type StaffOrder, type StaffOrderStatus } from "../../data/demoOrders";
 import "../AdminPage/AdminPage.css";
 import "./StaffPage.css";
 
-type OrderStatus = "Received" | "In kitchen" | "Ready" | "Delivered";
-type Order = {
-  id: string;
-  customer: string;
-  contact: string;
-  type: "Takeout" | "Delivery";
-  verificationCode: string;
-  status: OrderStatus;
-  items: { name: string; quantity: number; price: number }[];
-};
 type StaffPageProps = {
-  onNavigate: (page: "landing" | "menu" | "admin" | "staff" | "customer") => void;
+  onNavigate: (page: "landing" | "menu" | "login" | "admin" | "staff" | "customer") => void;
 };
 
-const demoOrders: Order[] = [
-  {
-    id: "SC-1042",
-    customer: "Jordan Lee",
-    contact: "jordan@example.com",
-    type: "Takeout",
-    verificationCode: "4821",
-    status: "Received",
-    items: [
-      { name: "Nerf Kebab", quantity: 2, price: 129 },
-      { name: "Stardust Soda", quantity: 2, price: 35 },
-    ],
-  },
-  {
-    id: "SC-1043",
-    customer: "Casey Patel",
-    contact: "+46 70 555 12 34",
-    type: "Delivery",
-    verificationCode: "7395",
-    status: "In kitchen",
-    items: [
-      { name: "Nebulosa-ramen", quantity: 1, price: 155 },
-      { name: "Comet Wings", quantity: 1, price: 99 },
-    ],
-  },
-  {
-    id: "SC-1044",
-    customer: "Morgan Reyes",
-    contact: "+46 70 555 98 76",
-    type: "Takeout",
-    verificationCode: "2618",
-    status: "Ready",
-    items: [{ name: "Meteor Fries", quantity: 1, price: 59 }],
-  },
-];
-
-const statusClass: Record<OrderStatus, string> = {
+const statusClass: Record<StaffOrderStatus, string> = {
   Received: "staff-status--received",
   "In kitchen": "staff-status--kitchen",
   Ready: "staff-status--ready",
@@ -62,10 +17,11 @@ const statusClass: Record<OrderStatus, string> = {
 };
 
 function StaffPage({ onNavigate }: StaffPageProps) {
-  const [orders, setOrders] = useState(demoOrders);
+  const [orders, setOrders] = useState(demoStaffOrders);
   const [verificationCodes, setVerificationCodes] = useState<Record<string, string>>({});
   const [notice, setNotice] = useState("");
-  const staffMember = demoPersonnel.find((person) => person.status === "Active") ?? demoPersonnel[0];
+  const staffMember = demoPersonnel.find((person) => person.status === "Active");
+  const staffName = staffMember?.name ?? "Staff member";
 
   const orderCounts = useMemo(
     () => ({
@@ -76,22 +32,22 @@ function StaffPage({ onNavigate }: StaffPageProps) {
     [orders],
   );
 
-  function updateOrder(orderId: string, status: OrderStatus, message: string) {
+  function updateOrder(orderId: string, status: StaffOrderStatus, message: string) {
     setOrders((current) =>
       current.map((order) => (order.id === orderId ? { ...order, status } : order)),
     );
     setNotice(message);
   }
 
-  function sendToKitchen(order: Order) {
+  function sendToKitchen(order: StaffOrder) {
     updateOrder(order.id, "In kitchen", `Order ${order.id} sent to the kitchen.`);
   }
 
-  function markReady(order: Order) {
+  function markReady(order: StaffOrder) {
     updateOrder(order.id, "Ready", `Order ${order.id} marked ready.`);
   }
 
-  function confirmHandoff(order: Order) {
+  function confirmHandoff(order: StaffOrder) {
     if (verificationCodes[order.id]?.trim() !== order.verificationCode) {
       setNotice("The customer verification code does not match this order.");
       return;
@@ -101,15 +57,22 @@ function StaffPage({ onNavigate }: StaffPageProps) {
   }
 
   return (
-    <main className="admin-page staff-page">
+    <main className="admin-page staff-page page-frame">
       <header className="admin-header">
         <div>
           <p className="admin-eyebrow">STARS CANTINA / STAFF</p>
           <h1 className="admin-brand">Order desk</h1>
         </div>
         <div className="admin-header__user">
-          <span className="admin-avatar" aria-hidden="true">{staffMember.name.charAt(0)}</span>
-          <span>{staffMember.name}</span>
+          <span className="admin-avatar" aria-hidden="true">{staffName.charAt(0)}</span>
+          <span className="admin-header__name">{staffName}</span>
+          <button
+            className="admin-button admin-button--quiet admin-header__logout"
+            onClick={() => onNavigate("landing")}
+            type="button"
+          >
+            Log out
+          </button>
         </div>
       </header>
       <div className="admin-colour-stripes" aria-hidden="true" />
