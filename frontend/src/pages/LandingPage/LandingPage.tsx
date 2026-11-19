@@ -2,7 +2,7 @@ import "./LandingPage.css";
 import BottomNav from "../../components/BottomNav";
 
 interface LandingPageProps {
-  onNavigate: (page: "landing" | "menu" | "admin") => void;
+  onNavigate: (page: "landing" | "menu" | "admin" | "staff") => void;
 }
 
 function LandingPage({ onNavigate }: LandingPageProps) {
