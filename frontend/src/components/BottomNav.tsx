@@ -1,8 +1,8 @@
 import Icon from "./Icon";
 
 interface BottomNavProps {
-  currentPage?: "landing" | "menu" | "admin" | "staff";
-  onNavigate?: (page: "landing" | "menu" | "admin" | "staff") => void;
+  currentPage?: "landing" | "menu" | "admin" | "staff" | "customer";
+  onNavigate?: (page: "landing" | "menu" | "admin" | "staff" | "customer") => void;
 }
 
 function BottomNav({ currentPage = "menu", onNavigate }: BottomNavProps) {
@@ -42,7 +42,7 @@ function BottomNav({ currentPage = "menu", onNavigate }: BottomNavProps) {
         aria-current={currentPage === "admin" ? "page" : undefined}
       >
         <Icon name="user" />
-        <span>Account</span>
+        <span>Admin</span>
       </button>
 
       <button
@@ -53,6 +53,16 @@ function BottomNav({ currentPage = "menu", onNavigate }: BottomNavProps) {
       >
         <Icon name="user" />
         <span>Staff</span>
+      </button>
+
+      <button
+        className="nav-button"
+        type="button"
+        onClick={() => onNavigate?.("customer")}
+        aria-current={currentPage === "customer" ? "page" : undefined}
+      >
+        <Icon name="user" />
+        <span>Orders</span>
       </button>
     </nav>
   );

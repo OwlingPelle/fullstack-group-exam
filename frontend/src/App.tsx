@@ -1,11 +1,12 @@
 import { useState } from "react";
 import AdminPage from "./pages/AdminPage/AdminPage";
+import CustomerPage from "./pages/CustomerPage/CustomerPage";
 import LandingPage from "./pages/LandingPage/LandingPage";
 import MenuPage from "./pages/MenuPage/MenuPage";
 import StaffPage from "./pages/StaffPage/StaffPage";
 
 function App() {
-  const [currentPage, setCurrentPage] = useState<"landing" | "menu" | "admin" | "staff">("landing");
+  const [currentPage, setCurrentPage] = useState<"landing" | "menu" | "admin" | "staff" | "customer">("landing");
 
   return (
     <>
@@ -13,6 +14,8 @@ function App() {
         <AdminPage onNavigate={setCurrentPage} />
       ) : currentPage === "staff" ? (
         <StaffPage onNavigate={setCurrentPage} />
+      ) : currentPage === "customer" ? (
+        <CustomerPage onNavigate={setCurrentPage} />
       ) : currentPage === "landing" ? (
         <LandingPage onNavigate={setCurrentPage} />
       ) : (
