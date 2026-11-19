@@ -88,4 +88,3 @@ export const demoAccounts: AccountRecord[] = [
     status: "Active",
   },
 ];
-
