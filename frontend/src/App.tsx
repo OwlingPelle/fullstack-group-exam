@@ -5,8 +5,10 @@ import LandingPage from "./pages/LandingPage/LandingPage";
 import LoginPanel from "./pages/LoginPanel/LoginPanel";
 import MenuPage from "./pages/MenuPage/MenuPage";
 import StaffPage from "./pages/StaffPage/StaffPage";
+import CartPage from "./pages/CartPage/CartPage";
+import PaymentPage from "./pages/PaymentPage/PaymentPage";
 
-type AppPage = "landing" | "menu" | "login" | "admin" | "staff" | "customer";
+type AppPage = "landing" | "menu" | "cart" | "payment" | "login" | "admin" | "staff" | "customer";
 
 function App() {
   const [currentPage, setCurrentPage] = useState<AppPage>("landing");
@@ -23,6 +25,12 @@ function App() {
         <LoginPanel onNavigate={setCurrentPage} />
       ) : currentPage === "landing" ? (
         <LandingPage onNavigate={setCurrentPage} />
+      ) : currentPage === "cart" ? (
+        <CartPage onNavigate={setCurrentPage} />
+      ) : currentPage === "payment" ? (
+        <PaymentPage
+          onBack={() => setCurrentPage("cart")}
+          onPaid={() => setCurrentPage("landing")} />
       ) : (
         <MenuPage onNavigate={setCurrentPage} />
       )}

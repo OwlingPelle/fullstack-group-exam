@@ -7,8 +7,9 @@ import MenuItemCard from "../../components/MenuItemCard";
 import { useCartStore } from "../../stores/cartStore";
 import { menuItems } from "../../data/demoMenu";
 
+
 interface MenuPageProps {
-  onNavigate?: (page: "landing" | "menu" | "login" | "admin" | "staff" | "customer") => void;
+  onNavigate?: (page: "landing" | "menu" | "cart" | "login" | "admin" | "staff" | "customer") => void;
 }
 
 function MenuPage({ onNavigate }: MenuPageProps) {
@@ -26,7 +27,7 @@ function MenuPage({ onNavigate }: MenuPageProps) {
 
   return (
     <main className="menu-page page-frame">
-      <MenuHeader cartCount={cartCount} />
+      <MenuHeader cartCount={cartCount} onNavigate={onNavigate} />
 
       <section className="menu-content" aria-label="Food and drinks menu">
         <CategoryFilter

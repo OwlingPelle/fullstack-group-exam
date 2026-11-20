@@ -1,7 +1,7 @@
 import type { SVGProps } from "react";
 
 // Vi har lagt till 'home' i listan över giltiga ikoner
-export type IconName = "cart" | "menu" | "user" | "home" | "planet" | "lock" | "arrow-left";
+export type IconName = "cart" | "menu" | "user" | "home" | "planet" | "lock" | "arrow-left" | "remove";
 
 interface IconProps extends SVGProps<SVGSVGElement> {
   name: IconName;
@@ -59,6 +59,22 @@ function Icon({ name, ...props }: IconProps) {
       </svg>
     );
   }
+
+  if (name === "remove") {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      height="24"
+      width="24"
+      fill="#e3e3e3"
+      xmlns="http://www.w3.org/2000/svg"
+      aria-hidden="true"
+      {...props}
+    >
+      <path d="M7,21q-0.82,0-1.41-0.59T5,19V6H4V4H9V3h6V4h5V6H19V19q0,0.82-0.59,1.41T17,21H7ZM17,6H7V19H17V6ZM9,17h2V8H9v9Zm4,0h2V8H13v9ZM7,6V19V6Z" />
+    </svg>
+  );
+}
 
   if (name === "menu") {
     return (
