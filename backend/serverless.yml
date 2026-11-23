@@ -18,8 +18,8 @@ provider:
 
 functions:
   hello:
-    handler: src/handler.hello
+    handler: src/functions/index.handler
     events:
       - httpApi:
-          path: /hello
+          path: /index
           method: get
