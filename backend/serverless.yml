@@ -15,6 +15,8 @@ provider:
   # domain: api.example.com
   iam: 
     role: ${file(./config.yml):role}
+  httpApi:
+    cors: true
 
 functions:
   hello:
@@ -22,4 +24,11 @@ functions:
     events:
       - httpApi:
           path: /index
+          method: get
+
+  getMenu:
+    handler: src/functions/getMenu/getMenu.handler
+    events:
+      - httpApi:
+          path: /menu
           method: get
