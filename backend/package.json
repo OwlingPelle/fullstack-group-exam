@@ -7,7 +7,8 @@
     "check": "tsc --noEmit",
     "deploy": "serverless deploy",
     "package": "serverless package",
-    "test": "npm run check"
+    "test": "npm run check",
+    "seed": "node scripts/seedMenu.mts"
   },
   "engines": {
     "node": ">=24"
