@@ -25,3 +25,10 @@ functions:
       - httpApi:
           path: /index
           method: get
+
+  getMenu:
+    handler: src/functions/getMenu/getMenu.handler
+    events:
+      - httpApi:
+          path: /menu
+          method: get
