@@ -9,52 +9,72 @@ const TABLE_NAME = "cantina-db";
 
 // Vad frontend skickar in för typ.
 
+// Typ för vad frontend skickar in
 interface CartItem {
   id: string;
   quantity: number;
 }
 
 interface PaymentEvent {
-  body: string; // detta är från frontend // JSON.
+  body: string; // JSON-sträng från frontend
 }
 
 export const handler = async (event: PaymentEvent) => {
   try {
-    // parsa inkommande body från frontend
+    // 1. Parsa inkommande body från frontend
     const body = JSON.parse(event.body);
-    const cartItem: CartItem[] = body.items;
-    if (!cartItem || cartItem.length === 0) {
-      return errorResponse(400, "cantina wars cart is empty");
+    const cartItems: CartItem[] = body.items;
+
+    if (!cartItems || cartItems.length === 0) {
+      return errorResponse(400, "Cart is empty");
     }
-    // Hämtar alla menyrader från dynamoDB baserat på id
-    // Använder BatchGetCommand för att hämta flera items effektivt
+
+    // 2. Hämta alla menyrader från DynamoDB baserat på id
+    // Vi använder BatchGetCommand för att hämta flera items effektivt
     const keys = cartItems.map((item) => ({
       PK: `MENUITEM#${item.id}`,
       SK: "METADATA",
     }));
 
-    const menuItems = dbResult.response?.[TABLE_NAME] ?? [];
-    // Bygg stripe-lineItems och räkna ut totalen
+    const dbResult = await db.send(
+      new BatchGetCommand({
+        RequestItems: {
+          [TABLE_NAME]: {
+            Keys: keys,
+          },
+        },
+      }),
+    );
+
+    const menuItems = dbResult.Responses?.[TABLE_NAME] ?? [];
+
+    // 3. Bygg Stripe-lineItems och räkna ut totalen
     const stripeLineItems = cartItems.map((cartItem) => {
-      const menuItems = menuItems.find((item) => item.itemID === cartItem.id);
+      const menuItem = menuItems.find((item) => item.itemId === cartItem.id);
+
+      if (!menuItem) {
+        throw new Error(`Menu item with id "${cartItem.id}" not found`);
+      }
+
+      if (cartItem.quantity <= 0) {
+        throw new Error(`Invalid quantity for item "${cartItem.id}"`);
+      }
+
+      return {
+        name: menuItem.name as string,
+        price: (menuItem.price as number) * 100, // Stripe vill ha ören
+        quantity: cartItem.quantity,
+      };
     });
 
-    if(!menuItem) => {
-        throw new Error (`menu item with id "${cartItem.id}" not found `)
-    }
-    if (cartItem.quantity <= 0) {
-        throw new error (`Invalid quantity for item "${cartItem.id}"`)
-    }
-    return {
-        name: menuItem.name as string,
-        price: (menuItems.price as number= * 100, // stripe vill ha ören.
-            quantity: cartItem.quantity,
-    }
-    const clientSecret = await createStripePaymentIntent(stripeLineItems)
-    return successResponse ({clientSecret})
+    // 4. Skapa PaymentIntent hos Stripe
+    const clientSecret = await createStripePaymentIntent(stripeLineItems);
+
+    // 5. Returnera clientSecret till frontend
+    return successResponse({ clientSecret });
   } catch (error: unknown) {
-    console.error("error inte createPaymentIntent", error);
-    const message = error instanceOf error ? error.message : "unknown error";
-    return errorResponse(500,message)
+    console.error("Error in createPaymentIntent:", error);
+    const message = error instanceof Error ? error.message : "Unknown error";
+    return errorResponse(500, message);
   }
 };
