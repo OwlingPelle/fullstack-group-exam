@@ -1,11 +1,13 @@
 service: backend
 
+useDotenv: true
+
 provider:
   name: aws
   runtime: nodejs24.x
   architecture: arm64
   environment:
-    STRIPE_SECRET_KEY: ${file(./.env):STRIPE_SECRET_KEY} # <-- NY
+    STRIPE_SECRET_KEY: ${env:STRIPE_SECRET_KEY}
   region: eu-north-1
   iam:
     role: ${file(./config.yml):role}
@@ -27,7 +29,7 @@ functions:
           path: /menu
           method: get
 
-  createPaymentIntent: # <-- NY
+  createPaymentIntent:
     handler: src/functions/createPaymentIntent.handler
     events:
       - httpApi:

@@ -5,23 +5,26 @@ interface StripeLineItem {
   quantity: number;
 }
 
+interface PaymentMetadata {
+  product_ids: string;
+  products: string;
+}
+
 export const createStripePaymentIntent = async (
   items: StripeLineItem[],
+  metadata: PaymentMetadata,
 ): Promise<string> => {
   try {
-    // Kontrollera att Stripe-nyckeln finns
     const secretKey = process.env.STRIPE_SECRET_KEY;
 
     if (!secretKey) {
       throw new Error("STRIPE_SECRET_KEY is not configured");
     }
 
-    // Kontrollera att kundvagnen innehåller produkter
     if (!Array.isArray(items) || items.length === 0) {
       throw new Error("No items provided for payment");
     }
 
-    // Beräkna totalbeloppet i ören
     const amount = items.reduce((total, item) => {
       if (!Number.isSafeInteger(item.price) || item.price <= 0) {
         throw new Error("Invalid product price");
@@ -38,16 +41,15 @@ export const createStripePaymentIntent = async (
       throw new Error("Invalid payment amount");
     }
 
-    // Anslut till Stripe
     const stripe = new Stripe(secretKey);
 
-    // Skapa PaymentIntent
     const paymentIntent = await stripe.paymentIntents.create({
       amount,
       currency: "sek",
       automatic_payment_methods: {
         enabled: true,
       },
+      metadata,
     });
 
     if (!paymentIntent.client_secret) {

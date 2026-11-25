@@ -5,7 +5,6 @@ import { successResponse, errorResponse } from "../responses/response.mts";
 
 const TABLE_NAME = "cantina-db";
 
-// Vad frontend skickar in
 interface CartItem {
   id: string;
   quantity: number;
@@ -17,7 +16,6 @@ interface PaymentEvent {
 
 export const handler = async (event: PaymentEvent) => {
   try {
-    // 1. Kontrollera inkommande request
     if (!event.body) {
       return errorResponse(400, "Request body is missing");
     }
@@ -34,7 +32,6 @@ export const handler = async (event: PaymentEvent) => {
       return errorResponse(400, "Cart is empty");
     }
 
-    // 2. Validera kundvagnens innehåll
     const cartItems: CartItem[] = [];
 
     for (const item of body.items) {
@@ -52,8 +49,8 @@ export const handler = async (event: PaymentEvent) => {
       if (
         typeof id !== "string" ||
         id.trim().length === 0 ||
-        !Number.isSafeInteger(quantity) ||
         typeof quantity !== "number" ||
+        !Number.isSafeInteger(quantity) ||
         quantity <= 0
       ) {
         return errorResponse(400, "Invalid product ID or quantity");
@@ -62,7 +59,6 @@ export const handler = async (event: PaymentEvent) => {
       cartItems.push({ id, quantity });
     }
 
-    // 3. Samla eventuella dubbla produkter
     const quantities = new Map<string, number>();
 
     for (const item of cartItems) {
@@ -80,12 +76,10 @@ export const handler = async (event: PaymentEvent) => {
       quantity,
     }));
 
-    // DynamoDB BatchGet tillåter maximalt 100 unika nycklar
     if (uniqueItems.length > 100) {
       return errorResponse(400, "Too many different products in cart");
     }
 
-    // 4. Hämta produkterna från DynamoDB
     const keys = uniqueItems.map((item) => ({
       PK: `MENUITEM#${item.id}`,
       SK: "METADATA",
@@ -101,7 +95,6 @@ export const handler = async (event: PaymentEvent) => {
       }),
     );
 
-    // Kontrollera om DynamoDB inte hämtade alla poster
     const unprocessedKeys = dbResult.UnprocessedKeys?.[TABLE_NAME]?.Keys ?? [];
 
     if (unprocessedKeys.length > 0) {
@@ -110,8 +103,7 @@ export const handler = async (event: PaymentEvent) => {
 
     const menuItems = dbResult.Responses?.[TABLE_NAME] ?? [];
 
-    // 5. Kontrollera produkterna och bygg Stripe-underlaget
-    const stripeLineItems = uniqueItems.map((cartItem) => {
+    const purchasedProducts = uniqueItems.map((cartItem) => {
       const menuItem = menuItems.find((item) => item.itemId === cartItem.id);
 
       if (!menuItem) {
@@ -126,8 +118,10 @@ export const handler = async (event: PaymentEvent) => {
         throw new Error(`Invalid price for menu item "${cartItem.id}"`);
       }
 
-      // DynamoDB har priset i kronor.
-      // Stripe behöver priset i ören.
+      if (typeof menuItem.title !== "string" || !menuItem.title.trim()) {
+        throw new Error(`Invalid title for menu item "${cartItem.id}"`);
+      }
+
       const priceInOre = Math.round(menuItem.price * 100);
 
       if (!Number.isSafeInteger(priceInOre)) {
@@ -135,15 +129,35 @@ export const handler = async (event: PaymentEvent) => {
       }
 
       return {
+        id: cartItem.id,
+        title: menuItem.title,
         price: priceInOre,
         quantity: cartItem.quantity,
       };
     });
 
-    // 6. Skapa PaymentIntent hos Stripe
-    const clientSecret = await createStripePaymentIntent(stripeLineItems);
+    const stripeLineItems = purchasedProducts.map((product) => ({
+      price: product.price,
+      quantity: product.quantity,
+    }));
 
-    // 7. Skicka tillbaka clientSecret till frontend
+    const metadata = {
+      product_ids: purchasedProducts
+        .map((product) => product.id)
+        .join(",")
+        .slice(0, 500),
+
+      products: purchasedProducts
+        .map((product) => `${product.title} x ${product.quantity}`)
+        .join(", ")
+        .slice(0, 500),
+    };
+
+    const clientSecret = await createStripePaymentIntent(
+      stripeLineItems,
+      metadata,
+    );
+
     return successResponse({ clientSecret });
   } catch (error: unknown) {
     console.error("Error in createPaymentIntent:", error);
