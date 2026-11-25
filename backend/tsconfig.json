@@ -22,6 +22,8 @@
     "moduleDetection": "force",
     "noUncheckedSideEffectImports": true,
 
+    "allowImportingTsExtensions": true,
+
     // Bygginställningar
     "sourceMap": true,
     "noEmit": true,

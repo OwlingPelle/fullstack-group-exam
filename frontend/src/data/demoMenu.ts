@@ -7,9 +7,10 @@ export interface MenuItem {
   price: number;
   category: MenuCategory;
   color: string;
+  image?: string;
 }
 
-export const menuCategories = ["All", "Main dishes", "Small plates", "Drinks", "Desserts"] as const;
+export const menuCategories = ["All", "Main dishes", "Drinks" ] as const;
 
 export const menuItems: MenuItem[] = [
   {

@@ -5,7 +5,7 @@ import CategoryFilter from "../../components/CategoryFilter";
 import MenuHeader from "../../components/MenuHeader";
 import MenuItemCard from "../../components/MenuItemCard";
 import { useCartStore } from "../../stores/cartStore";
-import { menuItems } from "../../data/demoMenu";
+import { useMenuStore } from "../../stores/menuStore";
 
 
 interface MenuPageProps {
@@ -17,12 +17,16 @@ function MenuPage({ onNavigate }: MenuPageProps) {
   const addItem = useCartStore((state) => state.addItem);
   const cartCount = useCartStore((state) => state.itemCount());
 
+  const menuItems = useMenuStore((state) => state.menuItems);
+  const isLoading = useMenuStore((state) => state.isLoading);
+  const isError = useMenuStore((state) => state.isError);
+
   const visibleItems = useMemo(
     () =>
       selectedCategory === "All"
         ? menuItems
         : menuItems.filter((item) => item.category === selectedCategory),
-    [selectedCategory],
+    [selectedCategory, menuItems],
   );
 
   return (
@@ -34,6 +38,9 @@ function MenuPage({ onNavigate }: MenuPageProps) {
           selected={selectedCategory}
           onSelect={setSelectedCategory}
         />
+
+        {isLoading && <p>Loading menu...</p>}
+        {isError && <p>Something went wrong. Please try again later.</p>}
 
         <div className="menu-items">
           {visibleItems.map((item) => (

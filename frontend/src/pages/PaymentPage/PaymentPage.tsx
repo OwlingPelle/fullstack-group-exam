@@ -3,7 +3,8 @@ import { loadStripe } from "@stripe/stripe-js";
 import type { Appearance } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
 import { useCartStore } from "../../stores/cartStore";
-import { menuItems } from "../../data/demoMenu";
+// import { menuItems } from "../../data/demoMenu";
+import { useMenuStore } from "../../stores/menuStore";
 import Icon from "../../components/Icon";
 import { createPaymentIntent } from "../../services/payment.api";
 import type { OrderLineType } from "../../types/payment.types";
@@ -50,8 +51,10 @@ type PropType = {
 //----------------------------------------------------------------------------------------------
 
 const PaymentPage = ({ onBack, onPaid } : PropType) => {
-    // The cart from the store, e.g. { "nerf-kebab": 2, "comet-wings": 1 }
+
     const { items } = useCartStore();
+    // The menu from DynamoDB (fetched in App.tsx)
+    const { menuItems } = useMenuStore();
 
     const [clientSecret, setClientSecret] = useState("");
     const [errorMessage, setErrorMessage] = useState("");

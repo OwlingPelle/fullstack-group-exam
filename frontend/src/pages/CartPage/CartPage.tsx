@@ -1,6 +1,7 @@
 
 import { useCartStore } from '../../stores/cartStore'
-import { menuItems } from "../../data/demoMenu";
+// import { menuItems } from "../../data/demoMenu";
+import { useMenuStore } from "../../stores/menuStore";
 import './CartPage.css'
 import Icon from "../../components/Icon";
 
@@ -10,6 +11,7 @@ interface CartPageProps {
 
 function CartPage({ onNavigate }: CartPageProps) {
   const items = useCartStore((state) => state.items)
+  const menuItems = useMenuStore((state) => state.menuItems) // Menyn från DynamoDB
   const addItem = useCartStore((state) => state.addItem)
 
   const cartProducts = Object.entries(items).flatMap(

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import AdminPage from "./pages/AdminPage/AdminPage";
 import CustomerPage from "./pages/CustomerPage/CustomerPage";
 import LandingPage from "./pages/LandingPage/LandingPage";
@@ -7,12 +7,19 @@ import MenuPage from "./pages/MenuPage/MenuPage";
 import StaffPage from "./pages/StaffPage/StaffPage";
 import CartPage from "./pages/CartPage/CartPage";
 import PaymentPage from "./pages/PaymentPage/PaymentPage";
+import { useMenuStore } from "./stores/menuStore";
 
 type AppPage = "landing" | "menu" | "cart" | "payment" | "login" | "admin" | "staff" | "customer";
 
 function App() {
   const [currentPage, setCurrentPage] = useState<AppPage>("landing");
+  
+  // HÄMTA MENYN
+  const fetchMenu = useMenuStore((state) => state.fetchMenu);
 
+  useEffect(() => {
+    fetchMenu();
+  }, [fetchMenu]);
   return (
     <>
       {currentPage === "admin" ? (
