@@ -1,9 +1,11 @@
+export interface HttpResponse {
+    statusCode: number;
+    body: string;
+}
 
-export const handler = async () => {
+export const sendResponse = <T extends object>(statusCode: number, body: T): HttpResponse => {
     return {
-            statusCode: 200,
-            body: JSON.stringify({
-            message: "Hello from TypeScript!"
-        })
-    };
-};
+        statusCode,
+        body: JSON.stringify(body)
+    }
+}
