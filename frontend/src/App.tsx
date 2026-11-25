@@ -7,6 +7,7 @@ import MenuPage from "./pages/MenuPage/MenuPage";
 import StaffPage from "./pages/StaffPage/StaffPage";
 import CartPage from "./pages/CartPage/CartPage";
 import PaymentPage from "./pages/PaymentPage/PaymentPage";
+// MENYN: storen som hämtar menyn från DynamoDB
 import { useMenuStore } from "./stores/menuStore";
 import type { AccountRole, AuthSession } from "./api/auth";
 
@@ -14,13 +15,50 @@ type AppPage = "landing" | "menu" | "cart" | "payment" | "login" | "register" | 
 
 function App() {
   const [currentPage, setCurrentPage] = useState<AppPage>("landing");
-  
-  // HÄMTA MENYN
+
+  // ---------- INLOGGNING (från "register, login, logout") ----------
+  const [session, setSession] = useState<AuthSession | null>(null);
+  const [registrationNotice, setRegistrationNotice] = useState("");
+
+  function handleAuthenticated(authenticatedSession: AuthSession) {
+    setSession(authenticatedSession);
+    setRegistrationNotice("");
+    setCurrentPage(authenticatedSession.role);
+  }
+
+  function handleRegistered(username: string) {
+    setRegistrationNotice(`Account created for ${username}. You can now log in.`);
+    setCurrentPage("login");
+  }
+
+  function handleLogout() {
+    setSession(null);
+    setCurrentPage("landing");
+  }
+
+  function handleNavigate(page: AppPage) {
+    if (page === "login" && session) {
+      setCurrentPage(session.role);
+      return;
+    }
+    setCurrentPage(page);
+  }
+
+  const dashboardRole: AccountRole | null =
+    currentPage === "admin" || currentPage === "staff" || currentPage === "customer"
+      ? currentPage
+      : null;
+  const visiblePage =
+    dashboardRole && session?.role !== dashboardRole ? "landing" : currentPage;
+
+  // ---------- MENYN ----------
+  // Hämtar menyn EN gång när appen startar, så att den finns på MenuPage, CartPage och PaymentPage
   const fetchMenu = useMenuStore((state) => state.fetchMenu);
 
   useEffect(() => {
     fetchMenu();
   }, [fetchMenu]);
+
   return (
     <>
       {visiblePage === "admin" && session ? (
