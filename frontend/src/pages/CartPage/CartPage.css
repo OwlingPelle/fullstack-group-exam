@@ -286,13 +286,18 @@
   text-align: center;
 }
 
-.cart-login a {
+.cart-login button {
+  padding: 0;
+  border: none;
+  background: transparent;
   color: var(--color-orange);
+  font: inherit;
+  cursor: pointer;
   text-decoration: none;
   transition: color 0.2s ease;
 }
 
-.cart-login a:hover {
+.cart-login button:hover {
   color: var(--color-light-orange);
   text-decoration: underline;
 }

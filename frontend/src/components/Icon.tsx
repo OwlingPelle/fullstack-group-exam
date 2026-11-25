@@ -1,6 +1,6 @@
 import type { SVGProps } from "react";
 
-// Vi har lagt till 'home' i listan över giltiga ikoner
+// 'home' is included in the available icon names.
 export type IconName = "cart" | "menu" | "user" | "home" | "planet" | "lock" | "arrow-left" | "remove";
 
 interface IconProps extends SVGProps<SVGSVGElement> {
@@ -84,7 +84,7 @@ function Icon({ name, ...props }: IconProps) {
     );
   }
 
-  // Här lägger vi till den nya Home-ikonen
+  // Home icon.
   if (name === "home") {
     return (
       <svg {...sharedProps}>

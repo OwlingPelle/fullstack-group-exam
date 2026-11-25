@@ -19,8 +19,8 @@ provider:
     cors: true
 
 functions:
-  hello:
-    handler: src/functions/index.handler
+  register:
+    handler: dist/functions/auth/register/index.handler
     events:
       - httpApi:
           path: /index
@@ -32,3 +32,11 @@ functions:
       - httpApi:
           path: /menu
           method: get
+          path: /register
+          method: post
+  login:
+    handler: dist/functions/auth/login/index.handler
+    events:
+      - httpApi:
+          path: /login
+          method: post

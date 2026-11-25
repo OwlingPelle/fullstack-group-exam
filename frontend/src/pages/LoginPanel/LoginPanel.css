@@ -3,7 +3,6 @@
    ======================================== */
 
 .login-panel-page {
-  /* Uppdaterat klassnamn */
   display: flex;
   flex-direction: column;
   color: var(--color-text);
@@ -149,13 +148,18 @@
   color: var(--color-text-muted);
 }
 
-.login-footer a {
+.login-footer button {
+  padding: 0;
+  border: none;
+  background: transparent;
   color: var(--color-light-orange);
-  text-decoration: none;
+  font: inherit;
   font-weight: 700;
+  cursor: pointer;
+  text-decoration: none;
 }
 
-.login-footer a:hover {
+.login-footer button:hover {
   text-decoration: underline;
 }
 

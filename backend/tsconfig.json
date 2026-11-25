@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    // JavaScript och Node.js
+    // Node.js
     "target": "ES2022",
     "module": "NodeNext",
     "moduleResolution": "NodeNext",
@@ -26,7 +26,6 @@
 
     // Bygginställningar
     "sourceMap": true,
-    "noEmit": true,
     "skipLibCheck": true
   },
 
