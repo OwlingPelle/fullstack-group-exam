@@ -1,26 +1,21 @@
-# "org" ensures this Service is used with the correct Serverless Framework Access Key.
-org: ${file(./config.yml):org}
-# "service" is the name of this project. This will also be added to your AWS resource names.
 service: backend
+
+useDotenv: true
 
 provider:
   name: aws
   runtime: nodejs24.x
   architecture: arm64
   environment:
+    STRIPE_SECRET_KEY: ${env:STRIPE_SECRET_KEY}
     JWT_SECRET: ${file(./.env):JWT_SECRET}
-  region : eu-north-1
-  # Uncomment to easily set up a custom domain. Read the docs for more details:
-  # https://www.serverless.com/framework/docs/providers/aws/guide/domains
-  # domain: api.example.com
+  region: eu-north-1
   iam:
     role: ${file(./config.yml):role}
-  # Tillåter att frontenden (på en annan adress) anropar API:t
   httpApi:
     cors: true
 
 functions:
-
   register:
     handler: dist/functions/auth/register/index.handler
     events:
@@ -41,3 +36,10 @@ functions:
       - httpApi:
           path: /menu
           method: get
+
+  createPaymentIntent:
+    handler: src/functions/createPaymentIntent.handler
+    events:
+      - httpApi:
+          path: /create-payment-intent
+          method: post
