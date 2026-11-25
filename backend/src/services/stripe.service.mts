@@ -6,6 +6,7 @@ interface StripeLineItem {
 }
 
 interface PaymentMetadata {
+  [key: string]: string;
   product_ids: string;
   products: string;
 }

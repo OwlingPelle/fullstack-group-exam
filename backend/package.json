@@ -4,9 +4,10 @@
   "type": "module",
   "description": "TypeScript AWS Lambda backend",
   "scripts": {
+    "build": "tsc",
     "check": "tsc --noEmit",
-    "deploy": "serverless deploy",
-    "package": "serverless package",
+    "deploy": "npm run build && serverless deploy",
+    "package": "npm run build && serverless package",
     "test": "npm run check",
     "seed": "node scripts/seedMenu.mts"
   },
@@ -14,6 +15,9 @@
     "node": ">=24"
   },
   "devDependencies": {
+    "@types/bcrypt": "^6.0.0",
+    "@types/http-errors": "^2.0.5",
+    "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^24.0.0",
     "serverless": "^4.46.0",
     "typescript": "^7.0.2"

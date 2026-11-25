@@ -8,6 +8,7 @@ provider:
   architecture: arm64
   environment:
     STRIPE_SECRET_KEY: ${env:STRIPE_SECRET_KEY}
+    JWT_SECRET: ${file(./.env):JWT_SECRET}
   region: eu-north-1
   iam:
     role: ${file(./config.yml):role}
@@ -15,15 +16,22 @@ provider:
     cors: true
 
 functions:
-  hello:
-    handler: src/functions/index.handler
+  register:
+    handler: dist/functions/auth/register/index.handler
     events:
       - httpApi:
-          path: /index
-          method: get
+          path: /register
+          method: post
+
+  login:
+    handler: dist/functions/auth/login/index.handler
+    events:
+      - httpApi:
+          path: /login
+          method: post
 
   getMenu:
-    handler: src/functions/getMenu/getMenu.handler
+    handler: dist/functions/getMenu/getMenu.handler
     events:
       - httpApi:
           path: /menu

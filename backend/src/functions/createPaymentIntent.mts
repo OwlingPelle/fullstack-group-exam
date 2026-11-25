@@ -1,7 +1,7 @@
 import { BatchGetCommand } from "@aws-sdk/lib-dynamodb";
-import { db } from "../services/db.mts";
-import { createStripePaymentIntent } from "../services/stripe.service.mts";
-import { successResponse, errorResponse } from "../responses/response.mts";
+import { db } from "../services/db.mjs";
+import { createStripePaymentIntent } from "../services/stripe.service.mjs";
+import { successResponse, errorResponse } from "../responses/response.mjs";
 
 const TABLE_NAME = "cantina-db";
 
