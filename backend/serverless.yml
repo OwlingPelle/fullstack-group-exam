@@ -13,30 +13,31 @@ provider:
   # Uncomment to easily set up a custom domain. Read the docs for more details:
   # https://www.serverless.com/framework/docs/providers/aws/guide/domains
   # domain: api.example.com
-  iam: 
+  iam:
     role: ${file(./config.yml):role}
+  # Tillåter att frontenden (på en annan adress) anropar API:t
   httpApi:
     cors: true
 
 functions:
+
   register:
     handler: dist/functions/auth/register/index.handler
     events:
       - httpApi:
-          path: /index
-          method: get
-
-  getMenu:
-    handler: src/functions/getMenu/getMenu.handler
-    events:
-      - httpApi:
-          path: /menu
-          method: get
           path: /register
           method: post
+
   login:
     handler: dist/functions/auth/login/index.handler
     events:
       - httpApi:
           path: /login
           method: post
+
+  getMenu:
+    handler: dist/functions/getMenu/getMenu.handler
+    events:
+      - httpApi:
+          path: /menu
+          method: get

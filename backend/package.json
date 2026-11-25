@@ -6,8 +6,8 @@
   "scripts": {
     "build": "tsc",
     "check": "tsc --noEmit",
-    "deploy": "serverless deploy",
-    "package": "serverless package",
+    "deploy": "npm run build && serverless deploy",
+    "package": "npm run build && serverless package",
     "test": "npm run check",
     "seed": "node scripts/seedMenu.mts"
   },

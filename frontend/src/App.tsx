@@ -14,13 +14,49 @@ type AppPage = "landing" | "menu" | "cart" | "payment" | "login" | "register" | 
 
 function App() {
   const [currentPage, setCurrentPage] = useState<AppPage>("landing");
-  
-  // HÄMTA MENYN
+
+  const [session, setSession] = useState<AuthSession | null>(null);
+  const [registrationNotice, setRegistrationNotice] = useState("");
+
+  function handleAuthenticated(authenticatedSession: AuthSession) {
+    setSession(authenticatedSession);
+    setRegistrationNotice("");
+    setCurrentPage(authenticatedSession.role);
+  }
+
+  function handleRegistered(username: string) {
+    setRegistrationNotice(`Account created for ${username}. You can now log in.`);
+    setCurrentPage("login");
+  }
+
+  function handleLogout() {
+    setSession(null);
+    setCurrentPage("landing");
+  }
+
+  function handleNavigate(page: AppPage) {
+    if (page === "login" && session) {
+      setCurrentPage(session.role);
+      return;
+    }
+    setCurrentPage(page);
+  }
+
+  const dashboardRole: AccountRole | null =
+    currentPage === "admin" || currentPage === "staff" || currentPage === "customer"
+      ? currentPage
+      : null;
+  const visiblePage =
+    dashboardRole && session?.role !== dashboardRole ? "landing" : currentPage;
+
+  // ---------- MENYN ----------
+  // Hämtar menyn när appen startar
   const fetchMenu = useMenuStore((state) => state.fetchMenu);
 
   useEffect(() => {
     fetchMenu();
   }, [fetchMenu]);
+
   return (
     <>
       {visiblePage === "admin" && session ? (
