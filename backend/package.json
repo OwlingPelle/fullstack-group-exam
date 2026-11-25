@@ -6,9 +6,10 @@
   "scripts": {
     "build": "tsc",
     "check": "tsc --noEmit",
-    "deploy": "npm run build && serverless deploy",
-    "package": "npm run build && serverless package",
-    "test": "npm run check"
+    "deploy": "serverless deploy",
+    "package": "serverless package",
+    "test": "npm run check",
+    "seed": "node scripts/seedMenu.mts"
   },
   "engines": {
     "node": ">=24"

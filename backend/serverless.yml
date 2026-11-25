@@ -23,6 +23,15 @@ functions:
     handler: dist/functions/auth/register/index.handler
     events:
       - httpApi:
+          path: /index
+          method: get
+
+  getMenu:
+    handler: src/functions/getMenu/getMenu.handler
+    events:
+      - httpApi:
+          path: /menu
+          method: get
           path: /register
           method: post
   login:

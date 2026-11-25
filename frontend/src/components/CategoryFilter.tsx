@@ -1,4 +1,4 @@
-import { menuCategories } from '../data/demoMenu'
+import { menuCategories } from '../types/menu.types'
 
 interface CategoryFilterProps {
   selected: string

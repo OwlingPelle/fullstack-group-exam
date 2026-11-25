@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import AdminPage from "./pages/AdminPage/AdminPage";
 import CustomerPage from "./pages/CustomerPage/CustomerPage";
 import LandingPage from "./pages/LandingPage/LandingPage";
@@ -7,46 +7,20 @@ import MenuPage from "./pages/MenuPage/MenuPage";
 import StaffPage from "./pages/StaffPage/StaffPage";
 import CartPage from "./pages/CartPage/CartPage";
 import PaymentPage from "./pages/PaymentPage/PaymentPage";
+import { useMenuStore } from "./stores/menuStore";
 import type { AccountRole, AuthSession } from "./api/auth";
 
 type AppPage = "landing" | "menu" | "cart" | "payment" | "login" | "register" | "admin" | "staff" | "customer";
 
 function App() {
   const [currentPage, setCurrentPage] = useState<AppPage>("landing");
-  const [session, setSession] = useState<AuthSession | null>(null);
-  const [registrationNotice, setRegistrationNotice] = useState("");
+  
+  // HÄMTA MENYN
+  const fetchMenu = useMenuStore((state) => state.fetchMenu);
 
-  function handleAuthenticated(authenticatedSession: AuthSession) {
-    setSession(authenticatedSession);
-    setRegistrationNotice("");
-    setCurrentPage(authenticatedSession.role);
-  }
-
-  function handleRegistered(username: string) {
-    setRegistrationNotice(`Account created for ${username}. You can now log in.`);
-    setCurrentPage("login");
-  }
-
-  function handleLogout() {
-    setSession(null);
-    setCurrentPage("landing");
-  }
-
-  function handleNavigate(page: AppPage) {
-    if (page === "login" && session) {
-      setCurrentPage(session.role);
-      return;
-    }
-    setCurrentPage(page);
-  }
-
-  const dashboardRole: AccountRole | null =
-    currentPage === "admin" || currentPage === "staff" || currentPage === "customer"
-      ? currentPage
-      : null;
-  const visiblePage =
-    dashboardRole && session?.role !== dashboardRole ? "landing" : currentPage;
-
+  useEffect(() => {
+    fetchMenu();
+  }, [fetchMenu]);
   return (
     <>
       {visiblePage === "admin" && session ? (
