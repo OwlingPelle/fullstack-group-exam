@@ -1,20 +1,28 @@
-# "org" ensures this Service is used with the correct Serverless Framework Access Key.
-org: ${file(./config.yml):org}
-# "service" is the name of this project. This will also be added to your AWS resource names.
+
 service: backend
 
 provider:
   name: aws
   runtime: nodejs24.x
   architecture: arm64
+  region: eu-north-1
+
   environment:
     JWT_SECRET: ${file(./.env):JWT_SECRET}
-  region : eu-north-1
-  # Uncomment to easily set up a custom domain. Read the docs for more details:
-  # https://www.serverless.com/framework/docs/providers/aws/guide/domains
-  # domain: api.example.com
-  iam: 
-    role: ${file(./config.yml):role}
+
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - dynamodb:GetItem
+            - dynamodb:PutItem
+            - dynamodb:UpdateItem
+            - dynamodb:DeleteItem
+            - dynamodb:Query
+            - dynamodb:Scan
+          Resource:
+            - arn:aws:dynamodb:eu-north-1:*:table/cantina-db
 
 functions:
   hello:
