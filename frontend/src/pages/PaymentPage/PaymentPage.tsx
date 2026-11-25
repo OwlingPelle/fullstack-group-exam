@@ -3,7 +3,6 @@ import { loadStripe } from "@stripe/stripe-js";
 import type { Appearance } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
 import { useCartStore } from "../../stores/cartStore";
-// import { menuItems } from "../../data/demoMenu";
 import { useMenuStore } from "../../stores/menuStore";
 import Icon from "../../components/Icon";
 import { createPaymentIntent } from "../../services/payment.api";

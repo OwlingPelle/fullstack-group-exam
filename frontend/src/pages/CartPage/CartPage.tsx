@@ -1,7 +1,6 @@
 
 import { useCartStore } from '../../stores/cartStore'
-// import { menuItems } from "../../data/demoMenu";
-import { useMenuStore } from "../../stores/menuStore";
+import { useMenuStore } from '../../stores/menuStore';
 import './CartPage.css'
 import Icon from "../../components/Icon";
 

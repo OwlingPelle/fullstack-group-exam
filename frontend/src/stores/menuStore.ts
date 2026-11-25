@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import type { MenuItem } from '../data/demoMenu'
+import type { MenuItem } from '../types/menu.types'
 import type { MenuItemApiType } from '../types/menu.types'
 import { getMenu } from '../services/menu.api'
 
