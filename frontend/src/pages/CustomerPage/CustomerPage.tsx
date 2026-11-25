@@ -1,11 +1,12 @@
 import BottomNav from "../../components/BottomNav";
 import { demoCustomerOrders, type CustomerOrderStatus } from "../../data/demoOrders";
-import { demoCustomerProfile } from "../../data/demoAccounts";
 import "../AdminPage/AdminPage.css";
 import "./CustomerPage.css";
 
 type CustomerPageProps = {
-  onNavigate: (page: "landing" | "menu" | "login" | "admin" | "staff" | "customer") => void;
+  username: string;
+  onNavigate: (page: "landing" | "menu" | "cart" | "login" | "admin" | "staff" | "customer") => void;
+  onLogout: () => void;
 };
 
 const statusClass: Record<CustomerOrderStatus, string> = {
@@ -15,7 +16,9 @@ const statusClass: Record<CustomerOrderStatus, string> = {
 };
 const statusSteps: CustomerOrderStatus[] = ["Received", "On the way", "Delivered"];
 
-function CustomerPage({ onNavigate }: CustomerPageProps) {
+function CustomerPage({ username, onNavigate, onLogout }: CustomerPageProps) {
+  const displayName = username.trim() || "Customer";
+  const firstName = displayName.split(/\s+/)[0];
   const activeOrders = demoCustomerOrders.filter((order) => order.status !== "Delivered").length;
 
   return (
@@ -26,11 +29,11 @@ function CustomerPage({ onNavigate }: CustomerPageProps) {
           <h1 className="admin-brand">My orders</h1>
         </div>
         <div className="admin-header__user">
-          <span className="admin-avatar" aria-hidden="true">{demoCustomerProfile.name.charAt(0)}</span>
-          <span className="admin-header__name">{demoCustomerProfile.name}</span>
+          <span className="admin-avatar" aria-hidden="true">{displayName.charAt(0).toUpperCase()}</span>
+          <span className="admin-header__name">{displayName}</span>
           <button
             className="admin-button admin-button--quiet admin-header__logout"
-            onClick={() => onNavigate("landing")}
+            onClick={onLogout}
             type="button"
           >
             Log out
@@ -48,7 +51,7 @@ function CustomerPage({ onNavigate }: CustomerPageProps) {
         </div>
 
         <p className="customer-intro">
-          Welcome back, {demoCustomerProfile.name.split(" ")[0]}. Track your current orders and review past receipts.
+          Welcome back, {firstName}. Track your current orders and review past receipts.
         </p>
 
         <div className="admin-stat-grid customer-stat-grid" aria-label="Your order summary">
@@ -56,7 +59,7 @@ function CustomerPage({ onNavigate }: CustomerPageProps) {
           <article className="admin-stat-card"><span>Order history</span><strong>{demoCustomerOrders.length}</strong><small>Receipts on this account</small></article>
         </div>
 
-        <div className="customer-order-list" aria-label={`Orders for ${demoCustomerProfile.name}`}>
+        <div className="customer-order-list" aria-label={`Orders for ${displayName}`}>
           {demoCustomerOrders.map((order) => {
             const currentStep = statusSteps.indexOf(order.status);
             const total = order.items.reduce((sum, item) => sum + item.quantity * item.price, 0);

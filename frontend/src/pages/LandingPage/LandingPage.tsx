@@ -3,7 +3,7 @@ import BottomNav from "../../components/BottomNav";
 import Icon from "../../components/Icon";
 
 interface LandingPageProps {
-  onNavigate: (page: "landing" | "menu" | "login" | "admin" | "staff" | "customer") => void;
+  onNavigate: (page: "landing" | "menu" | "cart" | "login" | "admin" | "staff" | "customer") => void;
 }
 
 function LandingPage({ onNavigate }: LandingPageProps) {
@@ -17,7 +17,7 @@ function LandingPage({ onNavigate }: LandingPageProps) {
         </h1>
       </header>
 
-      {/* Färgade avdelare */}
+      {/* Coloured divider */}
       <div className="color-divider" aria-hidden="true" />
 
       {/* Hero */}
@@ -30,7 +30,7 @@ function LandingPage({ onNavigate }: LandingPageProps) {
             className="hero__planet"
             name="planet"
             role="img"
-            aria-label="En planet i gult, rött och turkost med en ljus ring"
+            aria-label="A planet with yellow, red, and turquoise stripes and a bright ring"
           />
 
           <div className="hero__wordmark" aria-label="Stars Cantina">

@@ -38,7 +38,7 @@
   white-space: nowrap;
 }
 
-/* Färgade avdelare mellan header och hero */
+/* Coloured divider between the header and hero */
 .color-divider {
   width: 100%;
   min-height: 0;
@@ -131,9 +131,9 @@
 }
 
 /* ========================================
-   Bottom Navigation (Endast för LandingPage)
+   Bottom navigation (LandingPage only)
    ======================================== */
-/* Vi lägger till ".page" framför för att skydda menysidans CSS! */
+/* Scope this selector to protect the menu page styles. */
 .page .bottom-nav {
   position: absolute;
   bottom: 0;
@@ -143,49 +143,49 @@
 }
 
 /* ========================================
-   Rymdanimering för planeten
+   Planet animations
    ======================================== */
 
-/* 1. Den svävande rörelsen */
+/* 1. Floating motion */
 @keyframes floatPlanet {
   0% {
     transform: translateY(0px);
   }
   50% {
-    transform: translateY(-15px); /* Planeten rör sig 15px uppåt */
+    transform: translateY(-15px); /* Move the planet up 15px. */
   }
   100% {
     transform: translateY(0px);
   }
 }
 
-/* 2. Det pulserande skenet (använder gruppens gula färg) */
+/* 2. Pulsing glow using the group's yellow colour. */
 @keyframes glowPlanet {
   0% {
     filter: drop-shadow(0px 10px 20px rgba(0, 0, 0, 0.4));
   }
   50% {
-    filter: drop-shadow(0px 15px 30px rgba(242, 179, 61, 0.4)); /* Gult sken */
+    filter: drop-shadow(0px 15px 30px rgba(242, 179, 61, 0.4)); /* Yellow glow. */
   }
   100% {
     filter: drop-shadow(0px 10px 20px rgba(0, 0, 0, 0.4));
   }
 }
 
-/* Vi kopplar animationerna till din planet-klass */
+/* Apply animations to the planet. */
 .hero__planet {
-  /* Vi behåller den gamla koden men lägger till animationerna */
+  /* Keep the existing size while adding animations. */
   width: clamp(200px, 60vw, 280px);
   height: auto;
 
-  /* Här körs båda animationerna samtidigt, oändligt många gånger */
+  /* Run both animations together in an infinite loop. */
   animation:
     floatPlanet 6.2s ease-in-out infinite,
     glowPlanet 6s ease-in-out infinite;
 }
 
 /* ========================================
-   Rymdanimering: Blinkande stjärnor
+   Twinkling star animations
    ======================================== */
 
 @keyframes twinkleGold {
@@ -216,13 +216,13 @@
   }
 }
 
-/* Vi lägger till animationerna på stjärnorna */
+/* Apply animations to the stars. */
 .hero__star--gold {
   animation: twinkleGold 3s ease-in-out infinite;
 }
 
 .hero__star--cream {
-  /* Denna får en annan hastighet och en liten fördröjning för att inte blinka i takt */
+  /* Use a different speed and delay so the stars do not blink in sync. */
   animation: twinkleCream 4.5s ease-in-out infinite;
   animation-delay: 1.5s;
 }
