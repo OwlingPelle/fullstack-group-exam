@@ -7,7 +7,6 @@ import MenuPage from "./pages/MenuPage/MenuPage";
 import StaffPage from "./pages/StaffPage/StaffPage";
 import CartPage from "./pages/CartPage/CartPage";
 import PaymentPage from "./pages/PaymentPage/PaymentPage";
-// MENYN: storen som hämtar menyn från DynamoDB
 import { useMenuStore } from "./stores/menuStore";
 import type { AccountRole, AuthSession } from "./api/auth";
 
@@ -16,7 +15,6 @@ type AppPage = "landing" | "menu" | "cart" | "payment" | "login" | "register" | 
 function App() {
   const [currentPage, setCurrentPage] = useState<AppPage>("landing");
 
-  // ---------- INLOGGNING (från "register, login, logout") ----------
   const [session, setSession] = useState<AuthSession | null>(null);
   const [registrationNotice, setRegistrationNotice] = useState("");
 
@@ -52,7 +50,7 @@ function App() {
     dashboardRole && session?.role !== dashboardRole ? "landing" : currentPage;
 
   // ---------- MENYN ----------
-  // Hämtar menyn EN gång när appen startar, så att den finns på MenuPage, CartPage och PaymentPage
+  // Hämtar menyn när appen startar
   const fetchMenu = useMenuStore((state) => state.fetchMenu);
 
   useEffect(() => {
