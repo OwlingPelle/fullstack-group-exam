@@ -199,6 +199,7 @@ function AdminPage({ username, onNavigate, onLogout }: AdminPageProps) {
       price: Number(form.get("price")),
       category: String(form.get("category")) as MenuCategory,
       color: String(form.get("color")),
+      image: dialog.item?.image,
     };
 
     try {
