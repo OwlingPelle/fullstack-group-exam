@@ -8,6 +8,17 @@ provider:
   architecture: arm64
   region: eu-north-1
 
+  httpApi:
+    cors:
+      allowedOrigins:
+        - http://localhost:5173
+      allowedHeaders:
+        - Content-Type
+      allowedMethods:
+        - GET
+        - POST
+        - DELETE
+
   environment:
     JWT_SECRET: ${env:JWT_SECRET}
 
@@ -39,3 +50,17 @@ functions:
       - httpApi:
           path: /menu
           method: get
+
+  createMenu:
+    handler: src/functions/menu.createMenu
+    events:
+      - httpApi:
+          path: /menu
+          method: post
+
+  removeMenu:
+    handler: src/functions/menu.removeMenu
+    events:
+      - httpApi:
+          path: /menu/{id}
+          method: delete
