@@ -4,17 +4,37 @@
   "type": "module",
   "description": "TypeScript AWS Lambda backend",
   "scripts": {
+    "build": "tsc",
     "check": "tsc --noEmit",
-    "deploy": "serverless deploy",
-    "package": "serverless package",
-    "test": "npm run check"
+    "deploy": "npm run build && serverless deploy",
+    "package": "npm run build && serverless package",
+    "test": "npm run check",
+    "seed": "node scripts/seedMenu.mts"
   },
   "engines": {
     "node": ">=24"
   },
   "devDependencies": {
+    "@types/bcrypt": "^6.0.0",
+    "@types/http-errors": "^2.0.5",
+    "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^24.0.0",
     "serverless": "^4.46.0",
     "typescript": "^7.0.2"
+  },
+  "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.1175.0",
+    "@aws-sdk/lib-dynamodb": "^3.1175.0",
+    "@middy/core": "^7.9.2",
+    "@middy/http-error-handler": "^7.9.2",
+    "@middy/http-json-body-parser": "^7.9.2",
+    "bcrypt": "^6.0.0",
+    "dotenv": "^18.0.10",
+    "http-errors": "^2.0.1",
+    "joi": "^18.3.2",
+    "jsonwebtoken": "^9.0.3",
+    "stripe": "^23.2.0",
+    "uuid": "^14.0.3",
+    "zod": "^4.6.7"
   }
 }
