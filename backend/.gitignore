@@ -3,3 +3,4 @@ node_modules
 .cod
 config.yml
 .env
+serverless.yml

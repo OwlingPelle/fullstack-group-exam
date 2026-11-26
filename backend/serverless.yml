@@ -1,5 +1,6 @@
 
 service: backend
+useDotenv: true
 
 provider:
   name: aws
@@ -8,7 +9,7 @@ provider:
   region: eu-north-1
 
   environment:
-    JWT_SECRET: ${file(./.env):JWT_SECRET}
+    JWT_SECRET: ${env:JWT_SECRET}
 
   iam:
     role:
@@ -30,4 +31,11 @@ functions:
     events:
       - httpApi:
           path: /index
+          method: get
+
+  getMenu:
+    handler: src/functions/menu.getMenu
+    events:
+      - httpApi:
+          path: /menu
           method: get
