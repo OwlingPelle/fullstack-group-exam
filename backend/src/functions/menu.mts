@@ -1,13 +1,12 @@
 
 import type { APIGatewayProxyHandlerV2 } from "aws-lambda";
 import {
-  getMenuItems,
   saveMenuItem,
   deleteMenuItem,
   type MenuItem,
 } from "../services/menu.mjs";
 
-export const getMenu: APIGatewayProxyHandlerV2 = async () => {
+/*export const getMenu: APIGatewayProxyHandlerV2 = async () => {
   try {
     const items = await getMenuItems();
 
@@ -23,7 +22,7 @@ export const getMenu: APIGatewayProxyHandlerV2 = async () => {
       body: JSON.stringify({ message: "Could not fetch menu" }),
     };
   }
-};
+};*/
 
 export const createMenu: APIGatewayProxyHandlerV2 = async (event) => {
   try {
@@ -37,12 +36,11 @@ export const createMenu: APIGatewayProxyHandlerV2 = async (event) => {
     const item = JSON.parse(event.body) as MenuItem;
 
     if (
-      !item.id ||
-      !item.name ||
+      !item.itemId ||
+      !item.title ||
       !item.description ||
       typeof item.price !== "number" ||
-      !item.category ||
-      !item.color
+      (item.category !== "food" && item.category !== "drinks")
     ) {
       return {
         statusCode: 400,

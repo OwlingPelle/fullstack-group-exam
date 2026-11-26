@@ -14,7 +14,7 @@ import {
   menuCategories,
   type MenuCategory,
   type MenuItem,
-} from "../../data/demoMenu";
+} from "../../types/menu.types";
 import {
   getMenuItems,
   saveMenuItem as saveMenuItemApi,

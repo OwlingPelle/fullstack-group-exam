@@ -1,5 +1,5 @@
-
 service: backend
+
 useDotenv: true
 
 provider:
@@ -7,35 +7,13 @@ provider:
   runtime: nodejs24.x
   architecture: arm64
   region: eu-north-1
-
-  httpApi:
-    cors:
-      allowedOrigins:
-        - http://localhost:5173
-      allowedHeaders:
-        - Content-Type
-      allowedMethods:
-        - GET
-        - POST
-        - DELETE
-
   environment:
-    JWT_SECRET: ${env:JWT_SECRET}
     STRIPE_SECRET_KEY: ${env:STRIPE_SECRET_KEY}
-
+    JWT_SECRET: ${env:JWT_SECRET}
   iam:
-    role:
-      statements:
-        - Effect: Allow
-          Action:
-            - dynamodb:GetItem
-            - dynamodb:PutItem
-            - dynamodb:UpdateItem
-            - dynamodb:DeleteItem
-            - dynamodb:Query
-            - dynamodb:Scan
-          Resource:
-            - arn:aws:dynamodb:eu-north-1:*:table/cantina-db
+    role: ${file(./config.yml):role}
+  httpApi:
+    cors: true
 
 functions:
   register:

@@ -4,4 +4,3 @@ dist
 .cod
 config.yml
 .env
-serverless.yml
