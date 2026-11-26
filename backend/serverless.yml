@@ -38,7 +38,7 @@ functions:
           method: get
 
   createPaymentIntent:
-    handler: src/functions/createPaymentIntent.handler
+    handler: dist/functions/createPaymentIntent.handler
     events:
       - httpApi:
           path: /create-payment-intent
