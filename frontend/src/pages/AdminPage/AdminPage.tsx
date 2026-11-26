@@ -20,9 +20,19 @@ import {
   saveMenuItem as saveMenuItemApi,
   deleteMenuItem as deleteMenuItemApi,
 } from "../../api/menu.api";
+import {
+  getPersonnel,
+  savePersonnel as savePersonnelToApi,
+  deletePersonnel as deletePersonnelFromApi,
+} from "../../api/personel.api";
+import {
+  getAdminAccount,
+  saveAdminAccount,
+} from "../../api/account.api";
 import "./AdminPage.css";
 
 type AdminSection = "overview" | "menu" | "personnel" | "accounts" | "profile";
+
 type DialogState =
   | { kind: "menu"; item?: MenuItem }
   | { kind: "personnel"; person?: Personnel }
@@ -86,6 +96,76 @@ function AdminPage({ onNavigate }: AdminPageProps) {
     };
   }, []);
 
+  useEffect(() => {
+    let cancelled = false;
+
+    async function loadPersonnel() {
+      try {
+        const people = await getPersonnel();
+
+        if (!cancelled) {
+          const personnelToShow = people.length > 0 ? people : demoPersonnel;
+
+          setPersonnel(personnelToShow);
+
+          setAccounts((current) => [
+            ...current.filter((account) => account.role !== "Personnel"),
+            ...personnelToShow.map((person) => ({
+              id: person.id,
+              name: person.name,
+              email: person.email,
+              role: "Personnel" as const,
+              status: person.status,
+            })),
+          ]);
+        }
+      } catch (error) {
+        console.error("Could not load personnel:", error);
+      }
+    }
+
+    loadPersonnel();
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  // Load the admin profile from AWS.
+  useEffect(() => {
+    let cancelled = false;
+
+    async function loadProfile() {
+      try {
+        const savedProfile = await getAdminAccount(demoAdminProfile.id);
+
+        if (savedProfile && !cancelled) {
+          setProfile(savedProfile);
+
+          setAccounts((current) =>
+            current.map((account) =>
+              account.id === savedProfile.id
+                ? {
+                    ...account,
+                    name: savedProfile.name,
+                    email: savedProfile.email,
+                  }
+                : account,
+            ),
+          );
+        }
+      } catch (error) {
+        console.error("Could not load admin account:", error);
+      }
+    }
+
+    loadProfile();
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
   const activePersonnel = useMemo(
     () => personnel.filter((person) => person.status === "Active").length,
     [personnel],
@@ -128,14 +208,15 @@ function AdminPage({ onNavigate }: AdminPageProps) {
     }
   }
 
-  function savePersonnel(event: FormEvent<HTMLFormElement>) {
+  async function savePersonnel(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (dialog?.kind !== "personnel") return;
 
+    const currentDialog = dialog;
     const form = new FormData(event.currentTarget);
 
     const saved: Personnel = {
-      id: dialog.person?.id ?? `staff-${crypto.randomUUID()}`,
+      id: currentDialog.person?.id ?? `staff-${crypto.randomUUID()}`,
       name: String(form.get("name")).trim(),
       email: String(form.get("email")).trim(),
       position: String(form.get("position")).trim(),
@@ -143,53 +224,71 @@ function AdminPage({ onNavigate }: AdminPageProps) {
       status: String(form.get("status")) as Personnel["status"],
     };
 
-    setPersonnel((current) =>
-      dialog.person
-        ? current.map((person) => (person.id === saved.id ? saved : person))
-        : [...current, saved],
-    );
+    try {
+      await savePersonnelToApi(saved);
 
-    setAccounts((current) => {
-      const account = {
-        id: saved.id,
-        name: saved.name,
-        email: saved.email,
-        role: "Personnel" as const,
-        status: saved.status,
-      };
+      setPersonnel((current) =>
+        currentDialog.person
+          ? current.map((person) => (person.id === saved.id ? saved : person))
+          : [...current, saved],
+      );
 
-      return dialog.person
-        ? current.map((record) => (record.id === saved.id ? account : record))
-        : [...current, account];
-    });
+      setAccounts((current) => {
+        const account = {
+          id: saved.id,
+          name: saved.name,
+          email: saved.email,
+          role: "Personnel" as const,
+          status: saved.status,
+        };
 
-    setDialog(null);
-    showNotice(dialog.person ? "Personnel details updated." : "Personnel member added.");
+        return currentDialog.person
+          ? current.map((record) => (record.id === saved.id ? account : record))
+          : [...current, account];
+      });
+
+      setDialog(null);
+      showNotice(
+        currentDialog.person
+          ? "Personnel details updated."
+          : "Personnel member added.",
+      );
+    } catch (error) {
+      console.error("Could not save personnel:", error);
+      showNotice("Could not save personnel. Please try again.");
+    }
   }
 
-  function saveProfile(event: FormEvent<HTMLFormElement>) {
+  async function saveProfile(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
     const form = new FormData(event.currentTarget);
 
-    const updated = {
+    const updated: AdminProfile = {
       ...profile,
       name: String(form.get("name")).trim(),
       email: String(form.get("email")).trim(),
     };
 
-    setProfile(updated);
+    try {
+      await saveAdminAccount(updated);
 
-    setAccounts((current) =>
-      current.map((account) =>
-        account.id === updated.id
-          ? { ...account, name: updated.name, email: updated.email }
-          : account,
-      ),
-    );
+      setProfile(updated);
 
-    setDialog(null);
-    showNotice("Your account details were updated.");
+      setAccounts((current) =>
+        current.map((account) =>
+          account.id === updated.id
+            ? { ...account, name: updated.name, email: updated.email }
+            : account,
+        ),
+      );
+
+      setDialog(null);
+      showNotice("Your account details were saved successfully.");
+    } catch (error) {
+      console.error("Could not save admin account:", error);
+      showNotice("Could not save your account details. Please try again.");
+    }
   }
 
   async function removeMenuItem(item: MenuItem) {
@@ -206,14 +305,27 @@ function AdminPage({ onNavigate }: AdminPageProps) {
     }
   }
 
-  function removePersonnel(person: Personnel) {
+  async function removePersonnel(person: Personnel) {
     if (!window.confirm(`Remove ${person.name} from personnel? Their account will also be removed.`)) {
       return;
     }
 
-    setPersonnel((current) => current.filter((entry) => entry.id !== person.id));
-    setAccounts((current) => current.filter((account) => account.id !== person.id));
-    showNotice("Personnel member and account removed.");
+    try {
+      await deletePersonnelFromApi(person.id);
+
+      setPersonnel((current) =>
+        current.filter((entry) => entry.id !== person.id),
+      );
+
+      setAccounts((current) =>
+        current.filter((account) => account.id !== person.id),
+      );
+
+      showNotice("Personnel member and account removed.");
+    } catch (error) {
+      console.error("Could not delete personnel:", error);
+      showNotice("Could not remove personnel. Please try again.");
+    }
   }
 
   function resetPassword(event: FormEvent<HTMLFormElement>) {
@@ -288,7 +400,7 @@ function AdminPage({ onNavigate }: AdminPageProps) {
           <div className="admin-sidebar__note">
             <span className="admin-status-dot" />
             AWS connected
-            <small>Menu changes are saved to the database.</small>
+            <small>Menu, personnel and admin profile changes are saved to the database.</small>
           </div>
         </aside>
 
@@ -365,7 +477,7 @@ function AdminPage({ onNavigate }: AdminPageProps) {
               </div>
 
               <p className="admin-data-note">
-                Menu data is loaded from your AWS database. Personnel and account data are still demo data.
+                Menu, personnel and admin profile data are loaded from your AWS database. Customer account data is demo data.
               </p>
             </div>
           )}

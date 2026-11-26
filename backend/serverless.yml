@@ -64,3 +64,38 @@ functions:
       - httpApi:
           path: /menu/{id}
           method: delete
+
+  getPersonnel:
+    handler: src/functions/personel.getPersonnelHandler
+    events:
+      - httpApi:
+          path: /personnel
+          method: get
+
+  savePersonnel:
+    handler: src/functions/personel.savePersonnelHandler
+    events:
+      - httpApi:
+          path: /personnel
+          method: post
+
+  removePersonnel:
+    handler: src/functions/personel.removePersonnel
+    events:
+      - httpApi:
+          path: /personnel/{id}
+          method: delete
+
+  getAdminAccount:
+    handler: src/functions/account.getAdminAccountHandler
+    events:
+      - httpApi:
+          path: /account
+          method: get
+
+  saveAdminAccount:
+    handler: src/functions/account.saveAdminAccountHandler
+    events:
+      - httpApi:
+          path: /account
+          method: post
