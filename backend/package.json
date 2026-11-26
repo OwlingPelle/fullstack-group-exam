@@ -1,19 +1,25 @@
+
 {
   "name": "backend",
   "version": "1.0.0",
   "type": "module",
   "description": "TypeScript AWS Lambda backend",
   "scripts": {
+    "build": "tsc",
     "check": "tsc --noEmit",
-    "deploy": "serverless deploy",
-    "package": "serverless package",
-    "test": "npm run check"
+    "deploy": "npm run build && serverless deploy",
+    "package": "npm run build && serverless package",
+    "test": "npm run check",
+    "seed": "node scripts/seedMenu.mts"
   },
   "engines": {
     "node": ">=24"
   },
   "devDependencies": {
     "@types/aws-lambda": "^8.10.164",
+    "@types/bcrypt": "^6.0.0",
+    "@types/http-errors": "^2.0.5",
+    "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^24.0.0",
     "serverless": "^4.46.0",
     "typescript": "^7.0.2"
@@ -29,6 +35,7 @@
     "http-errors": "^2.0.1",
     "joi": "^18.3.2",
     "jsonwebtoken": "^9.0.3",
+    "stripe": "^23.2.0",
     "uuid": "^14.0.3",
     "zod": "^4.6.7"
   }

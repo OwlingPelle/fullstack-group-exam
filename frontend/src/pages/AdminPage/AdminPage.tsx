@@ -41,7 +41,9 @@ type DialogState =
   | null;
 
 type AdminPageProps = {
-  onNavigate: (page: "landing" | "menu" | "login" | "admin" | "staff" | "customer") => void;
+  username: string;
+  onNavigate: (page: "landing" | "menu" | "cart" | "login" | "admin" | "staff" | "customer") => void;
+  onLogout: () => void;
 };
 
 const sections: { id: AdminSection; label: string }[] = [
@@ -52,15 +54,23 @@ const sections: { id: AdminSection; label: string }[] = [
   { id: "profile", label: "My account" },
 ];
 
-function AdminPage({ onNavigate }: AdminPageProps) {
+function AdminPage({ username, onNavigate, onLogout }: AdminPageProps) {
+  const adminName = username.trim() || demoAdminProfile.name;
   const [section, setSection] = useState<AdminSection>("overview");
   const [items, setItems] = useState<MenuItem[]>([]);
   const [menuLoading, setMenuLoading] = useState(true);
   const [menuError, setMenuError] = useState("");
 
   const [personnel, setPersonnel] = useState<Personnel[]>(demoPersonnel);
-  const [accounts, setAccounts] = useState<AccountRecord[]>(demoAccounts);
-  const [profile, setProfile] = useState<AdminProfile>(demoAdminProfile);
+  const [accounts, setAccounts] = useState<AccountRecord[]>(() =>
+    demoAccounts.map((account) =>
+      account.id === demoAdminProfile.id ? { ...account, name: adminName } : account,
+    ),
+  );
+  const [profile, setProfile] = useState<AdminProfile>(() => ({
+    ...demoAdminProfile,
+    name: adminName,
+  }));
   const [dialog, setDialog] = useState<DialogState>(null);
   const [notice, setNotice] = useState("");
   const [passwordError, setPasswordError] = useState("");
@@ -356,11 +366,11 @@ function AdminPage({ onNavigate }: AdminPageProps) {
         </div>
 
         <div className="admin-header__user">
-          <span className="admin-avatar" aria-hidden="true">{profile.name.charAt(0)}</span>
+          <span className="admin-avatar" aria-hidden="true">{profile.name.charAt(0).toUpperCase()}</span>
           <span className="admin-header__name">{profile.name}</span>
           <button
             className="admin-button admin-button--quiet admin-header__logout"
-            onClick={() => onNavigate("landing")}
+            onClick={onLogout}
             type="button"
           >
             Log out
@@ -616,7 +626,7 @@ function AdminPage({ onNavigate }: AdminPageProps) {
           {section === "profile" && (
             <div className="admin-profile-card">
               <span className="admin-avatar admin-avatar--large" aria-hidden="true">
-                {profile.name.charAt(0)}
+                {profile.name.charAt(0).toUpperCase()}
               </span>
 
               <div className="admin-profile-card__details">
@@ -625,7 +635,6 @@ function AdminPage({ onNavigate }: AdminPageProps) {
                 <p>{profile.email}</p>
                 <span className="admin-pill admin-pill--active">Administrator</span>
               </div>
-
               <div className="admin-profile-card__actions">
                 <button
                   className="admin-button admin-button--outline"

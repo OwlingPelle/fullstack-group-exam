@@ -1,12 +1,13 @@
 import { useMemo, useState } from "react";
 import BottomNav from "../../components/BottomNav";
-import { demoPersonnel } from "../../data/demoAccounts";
 import { demoStaffOrders, type StaffOrder, type StaffOrderStatus } from "../../data/demoOrders";
 import "../AdminPage/AdminPage.css";
 import "./StaffPage.css";
 
 type StaffPageProps = {
-  onNavigate: (page: "landing" | "menu" | "login" | "admin" | "staff" | "customer") => void;
+  username: string;
+  onNavigate: (page: "landing" | "menu" | "cart" | "login" | "admin" | "staff" | "customer") => void;
+  onLogout: () => void;
 };
 
 const statusClass: Record<StaffOrderStatus, string> = {
@@ -16,12 +17,11 @@ const statusClass: Record<StaffOrderStatus, string> = {
   Delivered: "staff-status--delivered",
 };
 
-function StaffPage({ onNavigate }: StaffPageProps) {
+function StaffPage({ username, onNavigate, onLogout }: StaffPageProps) {
   const [orders, setOrders] = useState(demoStaffOrders);
   const [verificationCodes, setVerificationCodes] = useState<Record<string, string>>({});
   const [notice, setNotice] = useState("");
-  const staffMember = demoPersonnel.find((person) => person.status === "Active");
-  const staffName = staffMember?.name ?? "Staff member";
+  const staffName = username.trim() || "Staff member";
 
   const orderCounts = useMemo(
     () => ({
@@ -64,11 +64,11 @@ function StaffPage({ onNavigate }: StaffPageProps) {
           <h1 className="admin-brand">Order desk</h1>
         </div>
         <div className="admin-header__user">
-          <span className="admin-avatar" aria-hidden="true">{staffName.charAt(0)}</span>
+          <span className="admin-avatar" aria-hidden="true">{staffName.charAt(0).toUpperCase()}</span>
           <span className="admin-header__name">{staffName}</span>
           <button
             className="admin-button admin-button--quiet admin-header__logout"
-            onClick={() => onNavigate("landing")}
+            onClick={onLogout}
             type="button"
           >
             Log out

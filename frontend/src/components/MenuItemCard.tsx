@@ -1,4 +1,4 @@
-import type { MenuItem } from '../data/demoMenu'
+import type { MenuItem } from '../types/menu.types'
 
 interface MenuItemCardProps {
   item: MenuItem
@@ -8,7 +8,21 @@ interface MenuItemCardProps {
 function MenuItemCard({ item, onAdd }: MenuItemCardProps) {
   return (
     <article className="menu-item">
-      <div className="dish-art" style={{ backgroundColor: item.color }} aria-hidden="true" />
+      {/* <div className="dish-art" style={{ backgroundColor: item.color }} aria-hidden="true" /> */}
+      
+      {/* Om rätten har en bild visas den i cirkeln.
+          Färgen ligger kvar under och syns om bilden saknas. */}
+      <div
+        className="dish-art"
+        style={{
+          backgroundColor: item.color,
+          // url(...) är hur CSS anger en bild. Ingen bild → undefined (ingen bakgrundsbild)
+          backgroundImage: item.image ? `url(${item.image})` : undefined,
+          backgroundSize: 'cover',     // bilden fyller hela cirkeln
+          backgroundPosition: 'center' // bilden centreras
+        }}
+        aria-hidden="true"
+      />
       <div className="dish-details">
         <h2 className="dish-name">{item.name}</h2>
         <p className="dish-description">{item.description}</p>

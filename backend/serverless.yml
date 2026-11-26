@@ -21,6 +21,7 @@ provider:
 
   environment:
     JWT_SECRET: ${env:JWT_SECRET}
+    STRIPE_SECRET_KEY: ${env:STRIPE_SECRET_KEY}
 
   iam:
     role:
@@ -37,65 +38,79 @@ provider:
             - arn:aws:dynamodb:eu-north-1:*:table/cantina-db
 
 functions:
-  hello:
-    handler: src/functions/index.handler
+  register:
+    handler: dist/functions/auth/register/index.handler
     events:
       - httpApi:
-          path: /index
-          method: get
+          path: /register
+          method: post
+
+  login:
+    handler: dist/functions/auth/login/index.handler
+    events:
+      - httpApi:
+          path: /login
+          method: post
 
   getMenu:
-    handler: src/functions/menu.getMenu
+    handler: dist/functions/getMenu/getMenu.handler
     events:
       - httpApi:
           path: /menu
           method: get
 
   createMenu:
-    handler: src/functions/menu.createMenu
+    handler: dist/functions/menu.createMenu
     events:
       - httpApi:
           path: /menu
           method: post
 
   removeMenu:
-    handler: src/functions/menu.removeMenu
+    handler: dist/functions/menu.removeMenu
     events:
       - httpApi:
           path: /menu/{id}
           method: delete
 
   getPersonnel:
-    handler: src/functions/personel.getPersonnelHandler
+    handler: dist/functions/personel.getPersonnelHandler
     events:
       - httpApi:
           path: /personnel
           method: get
 
   savePersonnel:
-    handler: src/functions/personel.savePersonnelHandler
+    handler: dist/functions/personel.savePersonnelHandler
     events:
       - httpApi:
           path: /personnel
           method: post
 
   removePersonnel:
-    handler: src/functions/personel.removePersonnel
+    handler: dist/functions/personel.removePersonnel
     events:
       - httpApi:
           path: /personnel/{id}
           method: delete
 
   getAdminAccount:
-    handler: src/functions/account.getAdminAccountHandler
+    handler: dist/functions/account.getAdminAccountHandler
     events:
       - httpApi:
           path: /account
           method: get
 
   saveAdminAccount:
-    handler: src/functions/account.saveAdminAccountHandler
+    handler: dist/functions/account.saveAdminAccountHandler
     events:
       - httpApi:
           path: /account
+          method: post
+
+  createPaymentIntent:
+    handler: dist/functions/createPaymentIntent.handler
+    events:
+      - httpApi:
+          path: /create-payment-intent
           method: post

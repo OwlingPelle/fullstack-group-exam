@@ -1,0 +1,17 @@
+# Project Stack & Architecture
+- Frontend: React + TypeScript
+- Backend: Node.js + TypeScript running on AWS Lambda + API Gateway (Serverless)
+- Database: Live AWS DynamoDB (use @aws-sdk/client-dynamodb and @aws-sdk/lib-dynamodb v3)
+
+# Serverless & DynamoDB Best Practices
+- Initialize the DynamoDBDocumentClient outside the Lambda handler so connections are reused across warm invocations.
+- Use strict TypeScript interfaces for Lambda events (APIGatewayProxyEventV2 / APIGatewayProxyEvent) and DynamoDB item schemas.
+- Always configure DynamoDB tables with BillingMode: PAY_PER_REQUEST (On-Demand) so idle student projects incur near-zero AWS cost.
+- Prefer Query over Scan to avoid accidental Read Capacity Unit (RCU) spikes on live tables.
+- Follow least-privilege IAM permissions in infrastructure configs (grant only needed actions like dynamodb:GetItem, PutItem, Query, UpdateItem, DeleteItem on the specific table ARN).
+- Never hardcode AWS access keys, table names, or ARNs—pass table names via Lambda environment variables (`process.env.TABLE_NAME`).
+
+# Agent Behavior & Quota Efficiency
+- Never read or index `node_modules/`, `.serverless/`, `.aws-sam/`, `cdk.out/`, `dist/`, or `.git/`.
+- Before changing infrastructure config or multiple files, list a brief 3-bullet plan first.
+- Keep edits scoped strictly to the requested feature or Lambda function.

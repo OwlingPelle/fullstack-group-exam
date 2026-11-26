@@ -163,7 +163,8 @@
   min-height: 172px;
   padding: 20px 20px 18px;
   display: grid;
-  grid-template-columns: 90px minmax(0, 1fr);
+  /* grid-template-columns: 120px minmax(0, 1fr); */
+  grid-template-columns: 30% minmax(0, 1fr);
   align-items: center;
   gap: 16px;
   border: 1px solid var(--color-border);
@@ -173,13 +174,21 @@
 
 .dish-art {
   position: relative;
-  width: 74px;
-  height: 74px;
-  justify-self: center;
-  border-radius: 50%;
+  width: 100%;          /* lika bred som sin grid-kolumn */
+  aspect-ratio: 1;      /* ÄNDRAT: alltid lika hög som bred = fyrkant */
+  align-self: center;   /* ÄNDRAT: sträck inte ut, centrera i höjdled */
+  border-radius: 10%;
 }
 
-.dish-art::after {
+/* .dish-art {
+  position: relative;
+  width: 120px;
+  aspect-ratio: 1;
+  justify-self: center;
+  border-radius: 10%;
+} */
+
+/* .dish-art::after {
   position: absolute;
   top: 29px;
   left: -9px;
@@ -188,7 +197,7 @@
   border: 2px solid rgba(255, 242, 222, 0.9);
   border-radius: 50%;
   content: '';
-}
+} */
 
 .dish-details {
   min-width: 0;
@@ -259,20 +268,20 @@
 
   .menu-item {
     min-height: 182px;
-    grid-template-columns: 78px minmax(0, 1fr);
+    grid-template-columns: 40% minmax(0, 1fr); 
     padding: 20px 16px;
     gap: 12px;
   }
 
-  .dish-art {
-    width: 66px;
-    height: 66px;
+  /* .dish-art {
+    width: 120px;
+    aspect-ratio: 1;
   }
 
   .dish-art::after {
     top: 25px;
     width: 80px;
-  }
+  } */
 
   .dish-actions {
     align-items: flex-end;
@@ -307,21 +316,21 @@
 
   .menu-item {
     min-height: 158px;
-    grid-template-columns: 76px minmax(0, 1fr);
+    grid-template-columns: 30% minmax(0, 1fr);
     padding: 16px 12px;
     gap: 10px;
     border-radius: 22px;
   }
 
   .dish-art {
-    width: 64px;
-    height: 64px;
+    width: 90PX;
+    aspect-ratio: .7;
   }
 
-  .dish-art::after {
+  /* .dish-art::after {
     top: 24px;
     width: 78px;
-  }
+  } */
 
   .dish-name {
     font-size: 18px;

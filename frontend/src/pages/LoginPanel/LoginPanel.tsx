@@ -1,30 +1,67 @@
 import { useState, type FormEvent } from "react";
 import BottomNav from "../../components/BottomNav";
 import Icon from "../../components/Icon";
-import { demoAccounts } from "../../data/demoAccounts";
+import { login, register, type AuthSession } from "../../api/auth";
 import "./LoginPanel.css";
 
-type LoginPage = "landing" | "menu" | "login" | "admin" | "staff" | "customer";
+type AuthPage = "landing" | "menu" | "cart" | "login" | "register" | "admin" | "staff" | "customer";
 type LoginPanelProps = {
-  onNavigate: (page: LoginPage) => void;
+  mode: "login" | "register";
+  onNavigate: (page: AuthPage) => void;
+  onAuthenticated: (session: AuthSession) => void;
+  onRegistered: (username: string) => void;
+  registrationNotice: string;
 };
 
-function LoginPanel({ onNavigate }: LoginPanelProps) {
-  const [loginError, setLoginError] = useState("");
+function LoginPanel({
+  mode,
+  onNavigate,
+  onAuthenticated,
+  onRegistered,
+  registrationNotice,
+}: LoginPanelProps) {
+  const [formError, setFormError] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const isRegistering = mode === "register";
 
-  function signIn(event: FormEvent<HTMLFormElement>) {
+  async function submitForm(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const form = new FormData(event.currentTarget);
-    const email = String(form.get("email")).trim().toLowerCase();
-    const account = demoAccounts.find((item) => item.email.toLowerCase() === email);
+    setFormError("");
+    setIsSubmitting(true);
 
-    if (!account || account.status !== "Active") {
-      setLoginError("Kontot hittades inte eller är inaktivt. Använd en aktiv demokontoadress.");
-      return;
+    try {
+      const username = String(form.get("username") ?? "").trim();
+      const password = String(form.get("password") ?? "");
+
+      if (isRegistering) {
+        const confirmPassword = String(form.get("confirmPassword") ?? "");
+        if (password !== confirmPassword) {
+          setFormError("Passwords do not match.");
+          return;
+        }
+
+        await register({
+          username,
+          password,
+          email: String(form.get("email") ?? "").trim(),
+        });
+        onRegistered(username);
+      } else {
+        const session = await login({ username, password });
+        onAuthenticated(session);
+      }
+    } catch (error) {
+      setFormError(
+        error instanceof Error
+          ? error.message
+          : isRegistering
+            ? "Could not create account."
+            : "Could not log in.",
+      );
+    } finally {
+      setIsSubmitting(false);
     }
-
-    setLoginError("");
-    onNavigate(account.role === "Admin" ? "admin" : account.role === "Personnel" ? "staff" : "customer");
   }
 
   return (
@@ -34,59 +71,105 @@ function LoginPanel({ onNavigate }: LoginPanelProps) {
           className="login-planet"
           name="planet"
           role="img"
-          aria-label="En planet i gult, rött och turkost med en ljus ring"
+          aria-label="A planet with yellow, red, and turquoise stripes and a bright ring"
         />
 
         <div className="login-header">
-          <p className="login-subtitle">VÄLKOMMEN TILLBAKA</p>
+          <p className="login-subtitle">
+            {isRegistering ? "JOIN THE CANTINA" : "WELCOME BACK"}
+          </p>
           <h1 className="login-title">STARS CANTINA</h1>
         </div>
 
-        <form className="login-form" onSubmit={signIn}>
+        <form className="login-form" onSubmit={submitForm}>
           <div className="input-group">
-            <label htmlFor="email">E-POST</label>
+            <label htmlFor="username">USERNAME</label>
             <input
               autoComplete="username"
-              type="email"
-              id="email"
-              name="email"
-              placeholder="namn@exempel.se"
+              type="text"
+              id="username"
+              name="username"
+              placeholder="At least 4 characters"
+              minLength={4}
               required
             />
           </div>
 
+          {isRegistering && (
+            <div className="input-group">
+              <label htmlFor="email">EMAIL</label>
+              <input
+                autoComplete="email"
+                type="email"
+                id="email"
+                name="email"
+                placeholder="namn@exempel.se"
+                required
+              />
+            </div>
+          )}
+
           <div className="input-group">
-            <label htmlFor="password">LÖSENORD</label>
+            <label htmlFor="password">PASSWORD</label>
             <input
-              autoComplete="current-password"
               type="password"
               id="password"
               name="password"
               placeholder="********"
+              minLength={4}
+              autoComplete={isRegistering ? "new-password" : "current-password"}
               required
             />
           </div>
 
-          <a href="#" className="forgot-password">
-            Glömt lösenordet?
-          </a>
+          {isRegistering ? (
+            <div className="input-group">
+              <label htmlFor="confirmPassword">CONFIRM PASSWORD</label>
+              <input
+                autoComplete="new-password"
+                type="password"
+                id="confirmPassword"
+                name="confirmPassword"
+                placeholder="********"
+                minLength={4}
+                required
+              />
+            </div>
+          ) : (
+            <a href="#" className="forgot-password">
+              Forgot password?
+            </a>
+          )}
 
-          {loginError && <p className="login-error" role="alert">{loginError}</p>}
-          <p className="login-demo-hint">Demoinloggning: använd en aktiv e-postadress från demo-kontona. Lösenord verifieras inte.</p>
+          {formError && <p className="login-error" role="alert">{formError}</p>}
+          {!isRegistering && registrationNotice && (
+            <p className="login-demo-hint" role="status">{registrationNotice}</p>
+          )}
 
-          <button type="submit" className="login-button">
-            LOGGA IN
+          <button type="submit" className="login-button" disabled={isSubmitting}>
+            {isSubmitting
+              ? isRegistering ? "CREATING ACCOUNT..." : "LOGGING IN..."
+              : isRegistering ? "CREATE ACCOUNT" : "LOG IN"}
           </button>
         </form>
 
         <div className="login-footer">
           <p>
-            Ny i cantinan? <a href="#">Skapa konto</a>
+            {isRegistering ? "Already have an account? " : "New to the cantina? "}
+            <button
+              type="button"
+              onClick={() => {
+                setFormError("");
+                onNavigate(isRegistering ? "login" : "register");
+              }}
+            >
+              {isRegistering ? "Log in" : "Create account"}
+            </button>
           </p>
         </div>
       </main>
 
-      <BottomNav currentPage="login" onNavigate={onNavigate} />
+      <BottomNav currentPage={mode} onNavigate={onNavigate} />
     </div>
   );
 }

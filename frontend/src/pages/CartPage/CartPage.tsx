@@ -1,15 +1,17 @@
 
 import { useCartStore } from '../../stores/cartStore'
-import { menuItems } from "../../data/demoMenu";
+import { useMenuStore } from '../../stores/menuStore';
 import './CartPage.css'
 import Icon from "../../components/Icon";
 
 interface CartPageProps {
-  onNavigate?: (page: "landing" | "menu" | "cart" | "payment" | "login" | "admin" | "staff" | "customer") => void
+  onNavigate: (page: "landing" | "menu" | "cart" | "payment" | "login" | "admin" | "staff" | "customer") => void
+  isLoggedIn: boolean
 }
 
-function CartPage({ onNavigate }: CartPageProps) {
+function CartPage({ onNavigate, isLoggedIn }: CartPageProps) {
   const items = useCartStore((state) => state.items)
+  const menuItems = useMenuStore((state) => state.menuItems) // Menyn från DynamoDB
   const addItem = useCartStore((state) => state.addItem)
 
   const cartProducts = Object.entries(items).flatMap(
@@ -63,23 +65,23 @@ function CartPage({ onNavigate }: CartPageProps) {
       <header className="cart-header">
         <button
           className="cart-back-button"
-          onClick={() => onNavigate?.("menu")}
+          onClick={() => onNavigate("menu")}
         >
-          ← Tillbaka
+          ← Back
         </button>
 
-        <p className="cart-eyebrow">DIN ORDER</p>
-        <h1>Varukorg</h1>
+        <p className="cart-eyebrow">YOUR ORDER</p>
+        <h1>Your Cart</h1>
         <p className="cart-item-count">
-          {totalItems} produkter i din varukorg
+          {totalItems} {totalItems === 1 ? "item" : "items"} in your cart
         </p>
       </header>
 
       <section className="cart-content">
         {cartProducts.length === 0 ? (
           <div className="cart-empty">
-            <h2>Din varukorg är tom</h2>
-            <p>Det ser ut som att du inte har lagt till något ännu.</p>
+            <h2>Your cart is empty</h2>
+            <p>It looks like you haven’t added anything yet.</p>
           </div>
         ) : (
           <div className="cart-list">
@@ -94,13 +96,13 @@ function CartPage({ onNavigate }: CartPageProps) {
 
                 <div className="cart-product-info">
                   <h2>{product.name}</h2>
-                  <p>{product.price} kr / st</p>
+                  <p>{product.price} kr each</p>
                 </div>
 
                 <div className="cart-product-controls">
                   <button
                     onClick={() => decreaseItem(product.id)}
-                    aria-label={`Minska antal ${product.name}`}
+                    aria-label={`Decrease quantity of ${product.name}`}
                   >
                     −
                   </button>
@@ -109,7 +111,7 @@ function CartPage({ onNavigate }: CartPageProps) {
 
                   <button
                     onClick={() => addItem(product.id)}
-                    aria-label={`Öka antal ${product.name}`}
+                    aria-label={`Increase quantity of ${product.name}`}
                   >
                     +
                   </button>
@@ -122,7 +124,7 @@ function CartPage({ onNavigate }: CartPageProps) {
                 <button
                   className="cart-remove-button"
                   onClick={() => removeItem(product.id)}
-                  aria-label={`Ta bort ${product.name}`}
+                  aria-label={`Remove ${product.name}`}
                 >
                   <Icon name="remove" />
                 </button>
@@ -134,21 +136,26 @@ function CartPage({ onNavigate }: CartPageProps) {
 
       <footer className="cart-footer">
         <div className="cart-total">
-          <span>Totalt</span>
+          <span>Total</span>
           <strong>{total} kr</strong>
         </div>
 
         <button
           className="cart-checkout-button"
-          onClick={() => onNavigate?.("payment")}
+          onClick={() => onNavigate("payment")}
           disabled={cartProducts.length === 0}
         >
-          Gå till betalning →
+          Proceed to checkout →
         </button>
 
-        <p className="cart-login">
-          Har du redan ett konto? <a href="/login">Logga in</a>
-        </p>
+        {!isLoggedIn && (
+          <p className="cart-login">
+            Already have an account?{" "}
+            <button type="button" onClick={() => onNavigate("login")}>
+              Log in
+            </button>
+          </p>
+        )}
       </footer>
     </main>
   )
